@@ -1,0 +1,328 @@
+((dp0
+S'8878511714'
+p1
+I0
+s(dp2
+S'N00040002'
+p3
+S'B5'
+p4
+sS'N00040001'
+p5
+S'B5'
+p6
+sS'8879835866'
+p7
+S'B4'
+p8
+sS'8834408381'
+p9
+S'B4'
+p10
+sS'883440629X'
+p11
+S'B4'
+p12
+sS'9788866208037'
+p13
+S'B5'
+p14
+sS'N00030000'
+p15
+S'B4'
+p16
+sS'8834409248'
+p17
+S'B4'
+p18
+sS'8845247368'
+p19
+S'B4'
+p20
+sS'N00020000'
+p21
+S'B4'
+p22
+sS'8871339029'
+p23
+S'B5'
+p24
+sS'9788854118553'
+p25
+S'B4'
+p26
+sS'N00050000'
+p27
+S'B5'
+p28
+sS'8845050645'
+p29
+S'B4'
+p30
+sS'887983990X'
+p31
+S'B4'
+p32
+sS'8879836064'
+p33
+S'B4'
+p34
+sS'8811600448'
+p35
+S'B5'
+p36
+sS'N00010000'
+p37
+S'B4'
+p38
+sS'9788823904552'
+p39
+S'B4'
+p40
+sS'N00060000'
+p41
+S'B5'
+p42
+sS'8871334787'
+p43
+S'B5'
+p44
+sS'9788878516625'
+p45
+S'B5'
+p46
+sS'N00070000'
+p47
+S'B5'
+p48
+sS'8838470251'
+p49
+S'B4'
+p50
+sS'8838469148'
+p51
+S'B4'
+p52
+sg1
+S'B5'
+p53
+s(dp54
+S'la conquista del k 2'
+p55
+g35
+sS"i racconti del grande nord e della corsa all'oro"
+p56
+g21
+sS'storie proprio cos\xc3\x8c'
+p57
+g41
+sS'gallia est'
+p58
+g43
+sS"raistlin - l'alba del male"
+p59
+g17
+sS'tenebrae'
+p60
+g1
+sS"l'idiota"
+p61
+g31
+sS'robin hood'
+p62
+g25
+sS"l'amante di lady chatterley"
+p63
+g39
+sS'nemesis'
+p64
+g45
+sS"gli sherpa dell'everest. i veri eroi della montagna sacra"
+p65
+g49
+sS'la seconda generazione'
+p66
+g11
+sS'romanzi'
+p67
+g29
+sS'lo sherpa. la tragedia di \xc2\xabaria sottile\xc2\xbb raccontata dal capo degli sherpa'
+p68
+g51
+sS"i draghi dell'estate di fuoco"
+p69
+g9
+sS'tutte le opere - secondo volume'
+p70
+g3
+sS'frankenstein'
+p71
+g33
+sS'manhattan transfer'
+p72
+g13
+sS'palomar'
+p73
+g27
+sS'il futuro ha un cuore antico'
+p74
+g47
+sS'tutte le opere - primo volume'
+p75
+g5
+sS'qumran, la valle dei misteri'
+p76
+g37
+sS'il rosso e il nero'
+p77
+g7
+sS'baudolino'
+p78
+g19
+sS'eneide'
+p79
+g15
+sS'olympia - indagime ai giochi ellenici'
+p80
+g23
+s(dp81
+S''
+p82
+g82
+sg3
+g70
+sg5
+g75
+sg7
+g77
+sg9
+g69
+sg11
+g66
+sg13
+g72
+sg15
+g79
+sg17
+g59
+sg19
+g78
+sg21
+g56
+sg23
+g80
+sg25
+g62
+sg27
+g73
+sg29
+g67
+sg31
+g61
+sg33
+g71
+sg35
+g55
+sg37
+g76
+sg39
+g63
+sg41
+g57
+sg43
+g58
+sg45
+g64
+sg47
+g74
+sg49
+g65
+sg51
+g68
+sg1
+g60
+s(dp83
+g82
+g82
+sg3
+S'giacomo leopardi'
+p84
+sg5
+S'giacomo leopardi'
+p85
+sg7
+S'stendhal'
+p86
+sg9
+S'margaret weis, tracy hickman'
+p87
+sg11
+S'margaret weis, tracy hickman'
+p88
+sg13
+S'john dos passos'
+p89
+sg15
+S'virgilio'
+p90
+sg17
+S'margaret weis'
+p91
+sg19
+S'umberto eco'
+p92
+sg21
+S'jack london'
+p93
+sg23
+S'daniela comastri montanari'
+p94
+sg25
+S'alexandre dumas'
+p95
+sg27
+S'italo calvino'
+p96
+sg29
+S'joseph conrad'
+p97
+sg31
+S'fedor michajlovic dostoevskij'
+p98
+sg33
+S'mary shelley'
+p99
+sg35
+S'ardito desio'
+p100
+sg37
+S'franz braumann'
+p101
+sg39
+S'david herbert lawrence'
+p102
+sg41
+S'rudyard kipling'
+p103
+sg43
+S'daniela comastri montanari'
+p104
+sg45
+S'daniela comastri montanari'
+p105
+sg47
+S'carlo levi'
+p106
+sg49
+S'judy tenzing, tashi tenzing'
+p107
+sg51
+S'jamling tenzing norgay, broughton coburn'
+p108
+sg1
+S'daniela comastri montanari'
+p109
+sS'libri'
+p110
+tp111
+.
