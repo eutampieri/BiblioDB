@@ -7,7 +7,7 @@
 	* Mac OS X or Linux:
 		- Open a terminal and past the following code:
 			'''
-			 git clone https://github.com/eutampieri/BiblioDB.git
-			> cd BiblioDB
-			> python bibliodb.py
+			git clone https://github.com/eutampieri/BiblioDB.git
+			cd BiblioDB
+			python bibliodb.py
 			'''
