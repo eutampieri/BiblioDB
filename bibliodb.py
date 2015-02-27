@@ -24,7 +24,7 @@ else:
     o.close
 finally:
     with open('bibliodb.pickle','r') as o:
-                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile=pickle.load(o)
+                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile,ISBNown=pickle.load(o)
                     o.close
 def add():
     titolo=raw_input("Titolo: ").lower()
