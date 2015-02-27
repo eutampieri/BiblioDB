@@ -1,4 +1,8 @@
 #!/usr/bin/python2.7
+#Versione 0.2
+#Changelog:
+# *Ora l'app utilizza il formato JSON come DataBase
+# *Aggiunto il prestito di libri
 import json
 from setDbName import setDbName
 from deleteBook import deleteBook
@@ -52,26 +56,30 @@ def ISBNTotit(tISBN):
 def ISBNToAut(aISBN):
     autP=isbnAuthor[aISBN]
     return autP
-def prestaISBN(pISBN,state):
+def prestaISBN(pISBN,state,owner):
     ISBNuse[pISBN]=state
+    ISBNown[pISBN]=owner
+    print"Libro:\t"+ISBNTotit(pISBN).title()+"\nAutore: "+ISBNToAut(pISBN).title()+"\nISBN: \t"+pISBN+"\nPosizione:\t"+isbnPos[pISBN]+"\n"+50*'-'+'\n Stato:'
+    if state==0:
+        print"Prestato a: "+owner
+    elif state==1:
+        print"Reso da: "+owner
+        ISBNown[pISBN]="Biblioteca"
     o=open('bibliodb.json','w')
     json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
     o.close()
-    print"Libro:\t\t"+ISBNTotit(pISBN)+"\n+Posizione:\t"+isbnPos[pISBN]+"\nStato:\t\t"
-    if state==0:
-        print"Prestato"
-    elif state==1:
-        print"Reso"
 def manageISBN():
     #da implementare
-    print "Da implementare..."
+    #print "Da implementare..."
     todoP=raw_input("Si preferisce usare l'ISBN o il titolo? ").lower()
     if todoP.lower()=='isbn':
         isbn=raw_input("ISBN: ")
     else:
         titolo=raw_input("Titolo: ").lower()
         isbn=titToISBN(titolo)
-    prestaISBN(isbn,0)
+    own=raw_input("Codice tessera: ")
+    stato=input("Inserisci 0 per prestare il titolo, 1 per la resa. ")
+    prestaISBN(isbn,stato,own)
 def main():
     while 1:
         print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;\n* 'i' per aprire il menu di impostazioni;"
@@ -99,8 +107,6 @@ def main():
 def lista():
     for isbn, num in isbnPos.items():
         print isbn+":\t"+ISBNTotit(isbn).title()+", "+ISBNToAut(isbn).title()+"\t"+num.upper()
-#while True:
-#    add()
 def tsvExport(fileName):
     nome=(fileName.title())+".tsv"
     export=open(nome,'w')
