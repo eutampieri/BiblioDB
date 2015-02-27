@@ -3,7 +3,7 @@ import pickle
 from setDbName import setDbName
 from deleteBook import deleteBook
 ISBNuse={}
-#Dizionario che contiene le informazioni sullo stato dell'ISBN
+#Dizionario che contiene le informazioni sullo status dell'ISBN
 isbnPos={}
 #Dizionario contenente l'ISBN in relazione alPlacing del volume
 titleIsbn={}
@@ -52,20 +52,20 @@ def ISBNTotit(tISBN):
 def ISBNToAut(aISBN):
     autP=isbnAuthor[aISBN]
     return autP
-def prestaISBN(pISBN,state):
-    ISBNuse[pISBN]=state
+def prestaISBN(pISBN,Status):
+    ISBNuse[pISBN]=Status
     or=open('bibliodb.pickle','w')
     pickle.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
     or.close()
-    print"Book:\t\t"+ISBNTotit(pISBN)+"\n+Placing:\t"+isbnPos[pISBN]+"\nState:\t\t"
-    if state==0:
+    print"Book:\t\t"+ISBNTotit(pISBN)+"\n+Placing:\t"+isbnPos[pISBN]+"\nStatus:\t\t"
+    if Status==0:
         print"Borrowed"
-    elif state==1:
+    elif Status==1:
         print"Reso"
 def manageISBN():
     #da implementare
-    print "Da implementare..."
-    todoP=raw_input("Si preferisce usare l'ISBN or il titolo? ").lower()
+    print "To inplement..."
+    todoP=raw_input("Do you prefer using ISBN or title? ").lower()
     if todoP.lower()=='isbn':
         isbn=raw_input("ISBN: ")
     else:
@@ -74,8 +74,8 @@ def manageISBN():
     prestaISBN(isbn,0)
 def main():
     while 1:
-        print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per orttenere una lista dei libri registrati;\n* 'i' per aprire il menu di impostazioni;"
-        todoM=raw_input("* 'q' per uscire\n: ").lower()
+        print "Type:\n* 's' to change a volume's status;\n* 'a' to add a book;\n* 'x' to generate a TSV file;\n* 'l' to get a booklist;\n* 'i' to open settings menu;"
+        todoM=raw_input("* 'q' to uscire\n: ").lower()
         if todoM=='s':
             manageISBN()
         elif todoM.lower()=='l':
@@ -87,18 +87,18 @@ def main():
         elif todoM.lower()=='a':
             add()
         elif todoM.lower()=='i':
-            iInput=raw_input("Scrivi 'e' per eliminare un Book, 'f' per cambiare il nome del file TSV").lower()
+            iInput=raw_input("Type 'e' to eliminare un Book, 'f' to change TSV filename").lower()
             if iInput=='e':
                 deleteBook()
             elif iInput=='f':
                 setDbName()
             else:
-                print "ERRORE"
+                print "Error"
         else:
-            print"ERRORE"
+            print"Error"
 def lista():
     for isbn, num in isbnPos.items():
-        print isbn+":\t"+ISBNTotit(isbn).title()+", "+ISBNToAut(isbn).title()+"\t"+num.upper()
+        print isbn+":\t"+ISBNTotit(isbn).title()+", "+ISBNToAut(isbn).title()+"\t"+num.upto()
 #while True:
 #    add()
 def tsvExport(fileName):
@@ -106,6 +106,6 @@ def tsvExport(fileName):
     export=open(nome,'w')
     export.write("ISBN or ID\tTitolo\tAuthor\tPlacing\n")
     for isbn, num in isbnPos.items():
-        export.write (isbn+"\t"+ISBNTotit(isbn).title()+"\t"+ISBNToAut(isbn).title()+"\t"+num.upper()+"\n")
+        export.write (isbn+"\t"+ISBNTotit(isbn).title()+"\t"+ISBNToAut(isbn).title()+"\t"+num.upto()+"\n")
     export.close()
 main()
