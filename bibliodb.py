@@ -1,5 +1,5 @@
 #!/usr/bin/python2.7
-import pickle
+import json
 from setDbName import setDbName
 from deleteBook import deleteBook
 ISBNuse={}
@@ -15,16 +15,16 @@ isbnAuthor={}
 ISBNown={}
 nomeFile="db_libri"
 try:
-    o=open('bibliodb.pickle','r')
+    o=open('bibliodb.json','r')
 except IOError:
-    o=open('bibliodb.pickle','w')
-    pickle.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    o=open('bibliodb.json','w')
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
     o.close()
 else:
     o.close
 finally:
-    with open('bibliodb.pickle','r') as o:
-                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile,ISBNown=pickle.load(o)
+    with open('bibliodb.json','r') as o:
+                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile,ISBNown=json.load(o)
                     o.close
 def add():
     titolo=raw_input("Titolo: ").lower()
@@ -35,8 +35,8 @@ def add():
     titleIsbn[titolo]= isbn
     isbnTitle[isbn]= titolo
     isbnAuthor[isbn]=autore
-    o=open('bibliodb.pickle','w')
-    pickle.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    o=open('bibliodb.json','w')
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
     o.close()
     pass
 def find(titolo):
@@ -54,8 +54,8 @@ def ISBNToAut(aISBN):
     return autP
 def prestaISBN(pISBN,state):
     ISBNuse[pISBN]=state
-    o=open('bibliodb.pickle','w')
-    pickle.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    o=open('bibliodb.json','w')
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
     o.close()
     print"Libro:\t\t"+ISBNTotit(pISBN)+"\n+Posizione:\t"+isbnPos[pISBN]+"\nStato:\t\t"
     if state==0:
