@@ -6,6 +6,7 @@
 import json
 from setDbName import setDbName
 from deleteBook import deleteBook
+from setBorrowTime import setBorrowTime
 ISBNuse={}
 #Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos={}
@@ -17,18 +18,20 @@ isbnTitle={}
 isbnAuthor={}
 #Dizionario contenente il proprietario in relazione all'ISBN
 ISBNown={}
+ISBNborrowDate={}
 nomeFile="db_libri"
+borrowTime=30
 try:
     o=open('bibliodb.json','r')
 except IOError:
     o=open('bibliodb.json','w')
-    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowTime,ISBNborrowDate),o)
     o.close()
 else:
     o.close
 finally:
     with open('bibliodb.json','r') as o:
-                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile,ISBNown=json.load(o)
+                    ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,nomeFile,ISBNown,borrowTime=json.load(o)
                     o.close
 def add():
     titolo=raw_input("Titolo: ").lower()
@@ -40,7 +43,7 @@ def add():
     isbnTitle[isbn]= titolo
     isbnAuthor[isbn]=autore
     o=open('bibliodb.json','w')
-    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowTime),o)
     o.close()
     pass
 def find(titolo):
@@ -66,7 +69,7 @@ def prestaISBN(pISBN,state,owner):
         print"Reso da: "+owner
         ISBNown[pISBN]="Biblioteca"
     o=open('bibliodb.json','w')
-    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,nomeFile,ISBNown),o)
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowTime),o)
     o.close()
 def manageISBN():
     #da implementare
@@ -95,7 +98,7 @@ def main():
         elif todoM.lower()=='a':
             add()
         elif todoM.lower()=='i':
-            iInput=raw_input("Scrivi 'e' per eliminare un libro, 'f' per cambiare il nome del file TSV").lower()
+            iInput=raw_input("Scrivi 'e' per eliminare un libro, 'f' per cambiare il nome del file TSV o 'g' per cambiare il numero di giorni dei prestiti.").lower()
             if iInput=='e':
                 deleteBook()
             elif iInput=='f':

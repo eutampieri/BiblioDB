@@ -10,24 +10,21 @@ def setDbName():
     #Dizionario contenente l'autore in relazione all'ISBN
     isbnAuthor={}
     fileName=""
+    borrowtime=30
     try:
     	o=open('bibliodb.json')
     except IOError:
     	o=open('bibliodb.json','w')
-    	json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown),o)
+    	json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime),o)
     	o.close()
     else:
     	o.close
     finally:
         with open('bibliodb.json','r') as o:
-                        ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,fileName,ISBNown=json.load(o)
+                        ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime=json.load(o)
                         o.close
-    def ISBNTotit(tISBN):
-        titP=isbnTitle[tISBN]
-        return titP
-        pass
     fileName=raw_input("Nome del file DB da esportare: ")
     s=open('bibliodb.json','w')
-    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown),s)
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime),s)
     s.close()
     print "Il nome del file e' stato aggiornato"
