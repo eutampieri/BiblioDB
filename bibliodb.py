@@ -188,3 +188,4 @@ def tsvExport(fileName):
             num.upper() +
             "\n")
     export.close()
+main()
