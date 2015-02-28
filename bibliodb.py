@@ -7,6 +7,7 @@ from setDbName import setDbName
 from deleteBook import deleteBook
 from setBorrowTime import setBorrowTime
 from datetime import date, datetime, time, timedelta
+from Tkinter import *
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -189,3 +190,46 @@ def tsvExport(fileName):
             "\n")
     export.close()
 main()
+class MiaApp:
+  def __init__(self, genitore):
+    self.mioGenitore = genitore  ### (7) ricorda: il genitore e` radice
+    self.mioContenitore1 = Frame(genitore)
+    self.mioContenitore1.pack()
+
+    self.pulsante1 = Button(self.mioContenitore1)
+    self.pulsante1.configure(text = "Conferma")
+    self.pulsante1.bind("<Button-1>", self.pulsante1Premuto) ### (1)
+    self.pulsante2 = Button(self.mioContenitore1)
+    self.pulsante2.configure(text = "Annulla")   
+    self.pulsante2.bind("<Button-1>", self.pulsante2Premuto) ### (2)
+    self.pulsante3 = Button(self.mioContenitore1)
+    self.pulsante3.configure(text = "Annulla")   
+    self.pulsante3.bind("<Button-1>", self.pulsante2Premuto) ### (2)
+    self.pulsante4 = Button(self.mioContenitore1)
+    self.pulsante4.configure(text = "Annulla")   
+    self.pulsante4.bind("<Button-1>", self.pulsante2Premuto) ### (2)
+    self.pulsante5 = Button(self.mioContenitore1)
+    self.pulsante5.configure(text = "Annulla")   
+    self.pulsante5.bind("<Button-1>", self.pulsante2Premuto) ### (2)
+    self.pulsante6 = Button(self.mioContenitore1)
+    self.pulsante6.configure(text = "Annulla")   
+    self.pulsante6.bind("<Button-1>", self.pulsante2Premuto) ### (2)
+    self.pulsante1.pack()
+    self.pulsante2.pack()
+    self.pulsante3.pack()
+    self.pulsante4.pack()
+    self.pulsante5.pack()
+                
+  def pulsante1Premuto(self, evento):           ### (3)
+    if self.pulsante1["background"] == "green": ### (4)
+      self.pulsante1["background"] = "yellow"
+    else:
+      self.pulsante1["background"] = "green"
+        
+  def pulsante2Premuto(self, evento):  ### (5)
+    self.mioGenitore.destroy()         ### (6)
+
+                
+radice = Tk()
+miaApp = MiaApp(radice)
+radice.mainloop()
