@@ -9,17 +9,20 @@ def deleteBook():
     isbnTitle={}
     #Dizionario contenente l'autore in relazione all'ISBN
     isbnAuthor={}
+    fileName=""
+    borrowtime=30
+    ISBNborrowDate = {}
     try:
     	o=open('bibliodb.json')
     except IOError:
     	o=open('bibliodb.json','w')
-    	json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown),o)
+    	json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),o)
     	o.close()
     else:
     	o.close
     finally:
         with open('bibliodb.json','r') as o:
-                        ISBNuse, isbnPos, titleIsbn, isbnTitle,isbnAuthor=json.load(o)
+                        ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate=json.load(o)
                         o.close
     def ISBNTotit(tISBN):
         titP=isbnTitle[tISBN]
@@ -32,6 +35,6 @@ def deleteBook():
     titleIsbn.pop(ISBNTotit(scheda))
     isbnAuthor.pop(scheda)
     s=open('bibliodb.json','w')
-    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown),s)
+    json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),s)
     s.close()
     print 'La voce',scheda,'e stata eliminata correttamente!'
