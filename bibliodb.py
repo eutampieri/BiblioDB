@@ -244,9 +244,10 @@ class MiaApp:
             value=1).pack(
             anchor=W)
 
-        prestito.v = IntVar()
-        Radiobutton(prestito, text="ISBN", variable=prestito.v, value=1).pack(anchor=W)
-        Radiobutton(prestito,text="Titolo",variable=prestito.v, value=2).pack(anchor=W)
+        v = IntVar()
+        Radiobutton(prestito, text="ISBN", variable=v, value='1').pack(anchor=W)
+        Radiobutton(prestito,text="Titolo",variable=v, value='2').pack(anchor=W)
+        #v.set(1)
         e = Entry(prestito)
         e.pack()
         e.insert(0, "ISBN o Titolo")
@@ -255,7 +256,7 @@ class MiaApp:
         t = Entry(prestito)
         t.pack()
         t.insert(0, "Codice Tessera")
-        prestito.Pulsante1 = Button(prestito, command=lambda:debug(prestito.v.get(),por.get()), text="Presta")
+        prestito.Pulsante1 = Button(prestito, command=lambda:debug(v.get(),por.get()), text="Presta")
 #        prestito.Pulsante1 = Button(prestito, command=lambda:prestaISBN(ISBNoTit(e.get(),v.get()),por.get(),t.get()))
 #        prestito.Pulsante1.configure(text="Presta")
         #prestito.Pulsante1.bind("<Button-1>", prestaISBN(ISBNoTit(e.get(),v),0,t.get()))  # (1)
