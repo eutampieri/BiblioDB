@@ -57,6 +57,7 @@ def add():
     titleIsbn[titolo] = isbn
     isbnTitle[isbn] = titolo
     isbnAuthor[isbn] = autore
+    ISBNown[isbn]="Biblioteca"
     o = open('bibliodb.json', 'w')
     json.dump(
         (ISBNuse,
@@ -76,6 +77,7 @@ def GUIadd(titolo,autore,isbn,pos):
     titleIsbn[titolo] = isbn
     isbnTitle[isbn] = titolo
     isbnAuthor[isbn] = autore
+    ISBNown[isbn]="Biblioteca"
     o = open('bibliodb.json', 'w')
     json.dump(
         (ISBNuse,
