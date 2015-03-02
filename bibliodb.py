@@ -1,6 +1,7 @@
 #!/usr/bin/env python# Versione 0.3
 # Changelog:
 # *Ora l'app utilizza Tkinter!
+# *Nuova grafica a frames
 import json
 from setDbName import setDbName
 from deleteBook import deleteBook
