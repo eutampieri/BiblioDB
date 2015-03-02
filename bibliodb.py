@@ -1,4 +1,4 @@
-#!/usr/bin/env python# Versione 0.3-alpha
+#!/usr/bin/env python# Versione 0.3
 # Changelog:
 # *Ora l'app utilizza Tkinter!
 import json
@@ -7,6 +7,7 @@ from deleteBook import deleteBook
 from setBorrowTime import setBorrowTime
 from datetime import date, datetime, time, timedelta
 from Tkinter import *
+from ttk import *
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -69,17 +70,35 @@ def add():
         o)
     o.close()
     pass
-
+def GUIadd(titolo,autore,isbn,pos):
+    isbnPos[isbn] = pos
+    titleIsbn[titolo] = isbn
+    isbnTitle[isbn] = titolo
+    isbnAuthor[isbn] = autore
+    o = open('bibliodb.json', 'w')
+    json.dump(
+        (ISBNuse,
+         isbnPos,
+         titleIsbn,
+         isbnTitle,
+         isbnAuthor,
+         nomeFile,
+         ISBNown,
+         borrowTime,
+         ISBNborrowDate),
+        o)
+    o.close()
+    pass
 
 def find(titolo):
     print"Titolo: \t"
 
 
 def titToISBN(tit):
-    #try:
-    Isbn = titleIsbn[tit]
-    #except KeyError:
-    #    Isbn=0
+    try:
+        Isbn = titleIsbn[tit]
+    except KeyError:
+       Isbn=0
     return Isbn
     pass
 
@@ -96,41 +115,42 @@ def ISBNToAut(aISBN):
 
 
 def prestaISBN(pISBN, state, owner):
-    #try:
-    ISBNuse[pISBN] = state
-    ISBNown[pISBN] = owner
-    data_prestito = datetime.today().strftime('%d/%m/%Y')
-    data_fine = datetime.today() + timedelta(days=borrowTime)
-    res = data_fine.strftime('%d/%m/%Y')
-    ISBNborrowDate[pISBN] = data_prestito
-    print"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:'
-    if state == 0:
-        print"Prestato a: " + owner
-    elif state == 1:
-        print"Reso da: " + owner
-        ISBNown[pISBN] = "Biblioteca"
-    print"RENDERE ENTRO:"
-    print res
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
-    #except KeyError:
-    #    print"ERRORE"
+    strPrestito=""
+    try:
+        ISBNuse[pISBN] = state
+        ISBNown[pISBN] = owner
+        data_prestito = datetime.today().strftime('%d/%m/%Y')
+        data_fine = datetime.today() + timedelta(days=borrowTime)
+        res = data_fine.strftime('%d/%m/%Y')
+        ISBNborrowDate[pISBN] = data_prestito
+        strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
+        if state == 0:
+            strPrestito=strPrestito+"Prestato a: " + owner+'\n'
+            strPrestito=strPrestito+"RENDERE ENTRO:\n"
+            strPrestito=strPrestito+ res+'\n'
+        elif state == 1:
+            strPrestito=strPrestito+"Reso da: " + owner+'\n'
+            ISBNown[pISBN] = "Biblioteca"
+            strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
+        o = open('bibliodb.json', 'w')
+        json.dump(
+            (ISBNuse,
+             isbnPos,
+             titleIsbn,
+             isbnTitle,
+             isbnAuthor,
+             nomeFile,
+             ISBNown,
+             borrowTime,
+             ISBNborrowDate),
+            o)
+        o.close()
+    except KeyError:
+       print"ERRORE"
+    return strPrestito
 
 
 def manageISBN():
-    # da implementare
-    # print "Da implementare..."
     todoP = raw_input("Si preferisce usare l'ISBN o il titolo? ").lower()
     if todoP.lower() == 'isbn':
         isbn = raw_input("ISBN: ")
@@ -139,7 +159,7 @@ def manageISBN():
         isbn = titToISBN(titolo)
     own = raw_input("Codice tessera: ")
     stato = input("Inserisci 0 per prestare il titolo, 1 per la resa. ")
-    prestaISBN(isbn, stato, own)
+    print prestaISBN(isbn, stato, own)
 
 
 def main():
@@ -149,7 +169,7 @@ def main():
         if todoM == 's':
             manageISBN()
         elif todoM.lower() == 'l':
-            lista()
+            print lista()
         elif todoM.lower() == 'x':
             tsvExport(nomeFile)
         elif todoM.lower() == 'q':
@@ -170,85 +190,71 @@ def main():
 
 
 def lista():
+    list=""
     for isbn, num in isbnPos.items():
-        print isbn + ":\t" + ISBNTotit(isbn).title() + ", " + ISBNToAut(isbn).title() + "\t" + num.upper()
-
+        list=list+isbn + ":\t" + ISBNTotit(isbn).title() + ", " + ISBNToAut(isbn).title() + "\t" + num.upper()+"\n"
+    return list
 def tsvExport(fileName):
     nome = (fileName.title()) + ".tsv"
     export = open(nome, 'w')
     export.write("ISBN o Codice\tTitolo\tAutore\tPosizione\n")
     for isbn, num in isbnPos.items():
-        export.write(
-            isbn +
-            "\t" +
-            ISBNTotit(isbn).title() +
-            "\t" +
-            ISBNToAut(isbn).title() +
-            "\t" +
-            num.upper() +
-            "\n")
+        try:
+            export.write(
+                isbn +
+                "\t" +
+                ISBNTotit(isbn).title() +
+                "\t" +
+                ISBNToAut(isbn).title() +
+                "\t" +
+                num.upper() +
+                "\n")
+        except UnicodeEncodeError:
+            export.write(" \t \t \t \n")
     export.close()
 def ISBNoTit(text,type):
-    print text
-    print type
     if type==1:
         return text
     else:
         return titToISBN(text)
-#main()
-def debug(pr1,pr2):
-    print pr1
-    print pr2
-
-def mainGui():
-    mioGenitore = Tk()  # (7) ricorda: il genitore e` radice
-    mioContenitore1 = Frame(mioGenitore)
-    mioContenitore1.pack()
-
-    pulsante1 = Button(mioContenitore1)
-    pulsante1.configure(text="Gestisci",command=lambda:callApriPrestito())
-    #pulsante1.bind("<Button-1>", lambda:ApriPrestito())  # (1)
-    pulsante2 = Button(mioContenitore1)
-    pulsante2.configure(text="Annulla")
-    pulsante2.bind("<Button-1>", pulsante2Premuto)  # (2)
-    pulsante3 = Button(mioContenitore1)
-    pulsante3.configure(text="Annulla")
-    pulsante3.bind("<Button-1>", pulsante2Premuto)  # (2)
-    pulsante4 = Button(mioContenitore1)
-    pulsante4.configure(text="Annulla")
-    pulsante4.bind("<Button-1>", pulsante2Premuto)  # (2)
-    pulsante5 = Button(mioContenitore1)
-    pulsante5.configure(text="Annulla")
-    pulsante5.bind("<Button-1>", pulsante2Premuto)  # (2)
-    pulsante6 = Button(mioContenitore1)
-    pulsante6.configure(text="Annulla")
-    pulsante6.bind("<Button-1>", pulsante2Premuto)  # (2)
-    pulsante1.pack()
-    pulsante2.pack()
-    pulsante3.pack()
-    pulsante4.pack()
-    pulsante5.pack()
-    mioGenitore.mainloop()
-def callApriPrestito():
-    ApriPrestito()
-def pulsante2Premuto():
-    print ("Ciao")
+def GuiInfos():
+    info=Tk()
+    w = Label(info, text="BiblioDB 0.3\n--------------------\nMIT Licence\nBy Eugenio Tampieri",font=("Helvetica", 16),justify=CENTER)
+    w.pack()
+    info.mainloop()
 def GUI():
-    '''radice = Tk()
-    miaApp = mainGui(radice)
-    radice.mainloop()'''
-    mainGui()
-def ApriPrestito():  # (3)
-    prestito = Tk()
-    prestito.frame = Frame(prestito)
-    prestito.frame.pack()
+    ###########################################
+    #Finestra Generale
+    ###########################################
+    Finestra=Tk()
+    ###########################################
+    #Menu
+    ###########################################
+    barramenu=Menu(Finestra)
+    barramenu.add_command(label="Esporta!", command=lambda:tsvExport(nomeFile))
+    barramenu.add_command(label="?", command=lambda:GuiInfos())
+    Finestra.title="BiblioDB 0.3"
+    Finestra.config(menu=barramenu)
+    ###########################################
+    #Schede
+    ###########################################
+    n = Notebook(Finestra)
+    prestito = Frame(n); # first page, which would get widgets gridded into it
+    aggiungi = Frame(n); # second page
+    Frlista = Frame(n); # second page
+    n.add(prestito, text='Presta Libri')
+    n.add(aggiungi, text='Aggiungi Libro')
+    n.add(Frlista, text='Lista Libri')
+    n.pack()
+    ###########################################
+    #Scheda Prestito
+    ###########################################
     por=IntVar()
     Radiobutton(prestito, text="Prestare", variable=por, value=0).pack(anchor=W)
     Radiobutton(prestito, text="Rientrare",variable=por, value=1).pack(anchor=W)
     v = IntVar()
     Radiobutton(prestito, text="ISBN", variable=v, value=1).pack(anchor=W)
     Radiobutton(prestito,text="Titolo",variable=v, value=2).pack(anchor=W)
-    #v.set(1)
     e = Entry(prestito)
     e.pack()
     e.insert(0, "ISBN o Titolo")
@@ -257,8 +263,41 @@ def ApriPrestito():  # (3)
     t = Entry(prestito)
     t.pack()
     t.insert(0, "Codice Tessera")
-    prestito.Pulsante1 = Button(prestito, command=lambda:debug(v.get(),por.get()), text="Presta")
-#        prestito.Pulsante1 = Button(prestito, command=lambda:prestaISBN(ISBNoTit(e.get(),v.get()),por.get(),t.get()))
-#        prestito.Pulsante1.configure(text="Presta")
-    #prestito.Pulsante1.bind("<Button-1>", prestaISBN(ISBNoTit(e.get(),v),0,t.get()))  # (1)
-    prestito.Pulsante1.pack()
+    Button(prestito, command=lambda:outputPre.insert(INSERT, prestaISBN(ISBNoTit(e.get(),v.get()),por.get(),t.get())), text="Presta").pack()
+    scrollbar = Scrollbar(prestito)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    outputPre = Text(prestito, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputPre.pack()
+    scrollbar.config(command=outputPre.yview)
+
+    ###########################################
+    #Scheda Aggiunta
+    ###########################################
+    etiAddT = Label(aggiungi, text="Compila il modulo:")
+    etiAddT.pack()
+    titolo = Entry(aggiungi)
+    titolo.pack()
+    titolo.insert(0, "Titolo")
+    autore = Entry(aggiungi)
+    autore.pack()
+    autore.insert(0, "Autore")
+    isbn = Entry(aggiungi)
+    isbn.pack()
+    isbn.insert(0, "ISBN o ID")
+    posiz = Entry(aggiungi)
+    posiz.pack()
+    posiz.insert(0, "Posizione")
+    Button(aggiungi, command=lambda:GUIadd(titolo.get(),autore.get(),isbn.get(),posiz.get()), text="Aggiungi").pack()
+    ###########################################
+    #Scheda Lista
+    ###########################################
+    scrollbar = Scrollbar(Frlista)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    etiLisT = Label(aggiungi, text="Premi il pulsante per aggiornare la lista")
+    etiLisT.pack()
+    listaLibri = Text(Frlista, wrap=WORD, yscrollcommand=scrollbar.set)
+    listaLibri.pack()
+    scrollbar.config(command=listaLibri.yview)
+    Button(Frlista, command=lambda:listaLibri.insert(INSERT, lista()), text="Aggiorna").pack()
+    #Esecuzione finestra
+    Finestra.mainloop()
