@@ -117,37 +117,38 @@ def ISBNToAut(aISBN):
 
 def prestaISBN(pISBN, state, owner):
     strPrestito=""
-    try:
-        ISBNuse[pISBN] = state
-        ISBNown[pISBN] = owner
-        data_prestito = datetime.today().strftime('%d/%m/%Y')
-        data_fine = datetime.today() + timedelta(days=borrowTime)
-        res = data_fine.strftime('%d/%m/%Y')
-        ISBNborrowDate[pISBN] = data_prestito
-        strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
-        if state == 0:
-            strPrestito=strPrestito+"Prestato a: " + owner+'\n'
-            strPrestito=strPrestito+"RENDERE ENTRO:\n"
-            strPrestito=strPrestito+ res+'\n'
-        elif state == 1:
-            strPrestito=strPrestito+"Reso da: " + owner+'\n'
-            ISBNown[pISBN] = "Biblioteca"
-            strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
-        o = open('bibliodb.json', 'w')
-        json.dump(
-            (ISBNuse,
-             isbnPos,
-             titleIsbn,
-             isbnTitle,
-             isbnAuthor,
-             nomeFile,
-             ISBNown,
-             borrowTime,
-             ISBNborrowDate),
-            o)
-        o.close()
-    except KeyError:
-       print"ERRORE"
+    #try:
+    oldOwner=ISBNown[pISBN]
+    ISBNuse[pISBN] = state
+    ISBNown[pISBN] = owner
+    data_prestito = datetime.today().strftime('%d/%m/%Y')
+    data_fine = datetime.today() + timedelta(days=borrowTime)
+    res = data_fine.strftime('%d/%m/%Y')
+    ISBNborrowDate[pISBN] = data_prestito
+    strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
+    if state == 0:
+        strPrestito=strPrestito+"Prestato a: " + owner+'\n'
+        strPrestito=strPrestito+"RENDERE ENTRO:\n"
+        strPrestito=strPrestito+ res+'\n'
+    elif state == 1:
+        strPrestito=strPrestito+"Reso da: " + oldOwner+'\n'
+        ISBNown[pISBN] = "Biblioteca"
+        strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
+    o = open('bibliodb.json', 'w')
+    json.dump(
+        (ISBNuse,
+         isbnPos,
+         titleIsbn,
+         isbnTitle,
+         isbnAuthor,
+         nomeFile,
+         ISBNown,
+         borrowTime,
+         ISBNborrowDate),
+        o)
+    o.close()
+    #except KeyError:
+    #   print"ERRORE"
     return strPrestito
 
 
@@ -294,7 +295,7 @@ def GUI():
     ###########################################
     scrollbar = Scrollbar(Frlista)
     scrollbar.pack(side=RIGHT, fill=Y)
-    etiLisT = Label(aggiungi, text="Premi il pulsante per aggiornare la lista")
+    etiLisT = Label(Frlista, text="Premi il pulsante per aggiornare la lista")
     etiLisT.pack()
     listaLibri = Text(Frlista, wrap=WORD, yscrollcommand=scrollbar.set)
     listaLibri.pack()
