@@ -200,73 +200,65 @@ def debug(pr1,pr2):
     print pr1
     print pr2
 
-class MiaApp:
+def mainGui():
+    mioGenitore = Tk()  # (7) ricorda: il genitore e` radice
+    mioContenitore1 = Frame(mioGenitore)
+    mioContenitore1.pack()
 
-    def __init__(self, genitore):
-        self.mioGenitore = genitore  # (7) ricorda: il genitore e` radice
-        self.mioContenitore1 = Frame(genitore)
-        self.mioContenitore1.pack()
-
-        self.pulsante1 = Button(self.mioContenitore1)
-        self.pulsante1.configure(text="Gestisci")
-        self.pulsante1.bind("<Button-1>", self.pulsante1Premuto)  # (1)
-        self.pulsante2 = Button(self.mioContenitore1)
-        self.pulsante2.configure(text="Annulla")
-        self.pulsante2.bind("<Button-1>", self.pulsante2Premuto)  # (2)
-        self.pulsante3 = Button(self.mioContenitore1)
-        self.pulsante3.configure(text="Annulla")
-        self.pulsante3.bind("<Button-1>", self.pulsante2Premuto)  # (2)
-        self.pulsante4 = Button(self.mioContenitore1)
-        self.pulsante4.configure(text="Annulla")
-        self.pulsante4.bind("<Button-1>", self.pulsante2Premuto)  # (2)
-        self.pulsante5 = Button(self.mioContenitore1)
-        self.pulsante5.configure(text="Annulla")
-        self.pulsante5.bind("<Button-1>", self.pulsante2Premuto)  # (2)
-        self.pulsante6 = Button(self.mioContenitore1)
-        self.pulsante6.configure(text="Annulla")
-        self.pulsante6.bind("<Button-1>", self.pulsante2Premuto)  # (2)
-        self.pulsante1.pack()
-        self.pulsante2.pack()
-        self.pulsante3.pack()
-        self.pulsante4.pack()
-        self.pulsante5.pack()
-
-    def pulsante1Premuto(self, evento):  # (3)
-        prestito = Tk()
-        prestito.frame = Frame(prestito)
-        prestito.frame.pack()
-        por=IntVar()
-        Radiobutton(prestito, text="Prestare", variable=por, value=0).pack(anchor=W)
-        Radiobutton(
-            prestito,
-            text="Rientrare",
-            variable=por,
-            value=1).pack(
-            anchor=W)
-
-        v = IntVar()
-        Radiobutton(prestito, text="ISBN", variable=v, value='1').pack(anchor=W)
-        Radiobutton(prestito,text="Titolo",variable=v, value='2').pack(anchor=W)
-        #v.set(1)
-        e = Entry(prestito)
-        e.pack()
-        e.insert(0, "ISBN o Titolo")
-        w = Label(prestito, text="Codice Tessera:")
-        w.pack()
-        t = Entry(prestito)
-        t.pack()
-        t.insert(0, "Codice Tessera")
-        prestito.Pulsante1 = Button(prestito, command=lambda:debug(v.get(),por.get()), text="Presta")
+    pulsante1 = Button(mioContenitore1)
+    pulsante1.configure(text="Gestisci",command=lambda:callApriPrestito())
+    #pulsante1.bind("<Button-1>", lambda:ApriPrestito())  # (1)
+    pulsante2 = Button(mioContenitore1)
+    pulsante2.configure(text="Annulla")
+    pulsante2.bind("<Button-1>", pulsante2Premuto)  # (2)
+    pulsante3 = Button(mioContenitore1)
+    pulsante3.configure(text="Annulla")
+    pulsante3.bind("<Button-1>", pulsante2Premuto)  # (2)
+    pulsante4 = Button(mioContenitore1)
+    pulsante4.configure(text="Annulla")
+    pulsante4.bind("<Button-1>", pulsante2Premuto)  # (2)
+    pulsante5 = Button(mioContenitore1)
+    pulsante5.configure(text="Annulla")
+    pulsante5.bind("<Button-1>", pulsante2Premuto)  # (2)
+    pulsante6 = Button(mioContenitore1)
+    pulsante6.configure(text="Annulla")
+    pulsante6.bind("<Button-1>", pulsante2Premuto)  # (2)
+    pulsante1.pack()
+    pulsante2.pack()
+    pulsante3.pack()
+    pulsante4.pack()
+    pulsante5.pack()
+    mioGenitore.mainloop()
+def callApriPrestito():
+    ApriPrestito()
+def pulsante2Premuto():
+    print ("Ciao")
+def GUI():
+    '''radice = Tk()
+    miaApp = mainGui(radice)
+    radice.mainloop()'''
+    mainGui()
+def ApriPrestito():  # (3)
+    prestito = Tk()
+    prestito.frame = Frame(prestito)
+    prestito.frame.pack()
+    por=IntVar()
+    Radiobutton(prestito, text="Prestare", variable=por, value=0).pack(anchor=W)
+    Radiobutton(prestito, text="Rientrare",variable=por, value=1).pack(anchor=W)
+    v = IntVar()
+    Radiobutton(prestito, text="ISBN", variable=v, value=1).pack(anchor=W)
+    Radiobutton(prestito,text="Titolo",variable=v, value=2).pack(anchor=W)
+    #v.set(1)
+    e = Entry(prestito)
+    e.pack()
+    e.insert(0, "ISBN o Titolo")
+    w = Label(prestito, text="Codice Tessera:")
+    w.pack()
+    t = Entry(prestito)
+    t.pack()
+    t.insert(0, "Codice Tessera")
+    prestito.Pulsante1 = Button(prestito, command=lambda:debug(v.get(),por.get()), text="Presta")
 #        prestito.Pulsante1 = Button(prestito, command=lambda:prestaISBN(ISBNoTit(e.get(),v.get()),por.get(),t.get()))
 #        prestito.Pulsante1.configure(text="Presta")
-        #prestito.Pulsante1.bind("<Button-1>", prestaISBN(ISBNoTit(e.get(),v),0,t.get()))  # (1)
-        prestito.Pulsante1.pack()
-
-
-    def pulsante2Premuto(self, evento):  # (5)
-        self.mioGenitore.destroy()  # (6)
-
-def GUI():
-    radice = Tk()
-    miaApp = MiaApp(radice)
-    radice.mainloop()
+    #prestito.Pulsante1.bind("<Button-1>", prestaISBN(ISBNoTit(e.get(),v),0,t.get()))  # (1)
+    prestito.Pulsante1.pack()
