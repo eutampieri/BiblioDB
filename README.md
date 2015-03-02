@@ -10,5 +10,5 @@
 ```
 git clone https://github.com/eutampieri/BiblioDB.git
 cd BiblioDB
-python bibliodb.py
+python bibliodb_gui.pyw
 ```
