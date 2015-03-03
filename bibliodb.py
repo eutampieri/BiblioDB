@@ -93,8 +93,15 @@ def GUIadd(titolo,autore,isbn,pos):
     o.close()
     pass
 
-def find(titolo):
-    print"Titolo: \t"
+def find(mode,string):
+    if mode==1:
+        isbnCode=string
+    elif mode==2:
+        isbnCode=titToISBN(string.lower())
+    pos=isbnPos[isbnCode].upper()
+    titoloOpera=ISBNTotit(isbnCode).title()
+    toReturn="----------------------------------\nTitolo:\t"+titoloOpera+"\nISBN:\t"+isbnCode+"\nPosizione:\t"+pos+"\n----------------------------------\n"
+    return toReturn
 
 
 def titToISBN(tit):
@@ -246,9 +253,11 @@ def GUI():
     prestito = Frame(n); # first page, which would get widgets gridded into it
     aggiungi = Frame(n); # second page
     Frlista = Frame(n); # second page
+    Trova=Frame(n);
     n.add(prestito, text='Presta Libri')
     n.add(aggiungi, text='Aggiungi Libro')
     n.add(Frlista, text='Lista Libri')
+    n.add(Trova,text="Ricerca Libro")
     n.pack()
     ###########################################
     #Scheda Prestito
@@ -303,5 +312,23 @@ def GUI():
     listaLibri.pack()
     scrollbar.config(command=listaLibri.yview)
     Button(Frlista, command=lambda:listaLibri.insert(INSERT, lista()), text="Aggiorna").pack()
+    ###########################################
+    #Scheda Ricerca
+    ###########################################
+    modo = IntVar()
+    Radiobutton(Trova, text="ISBN", variable=modo, value=1).pack(anchor=W)
+    Radiobutton(Trova,text="Titolo",variable=modo, value=2).pack(anchor=W)
+    sL = Label(Trova, text="ISBN o Titolo:")
+    sL.pack()
+    s = Entry(Trova)
+    s.pack()
+    s.insert(0, "ISBN o Titolo")
+    Button(Trova, command=lambda:outputPre.insert(INSERT, find(modo.get(),s.get())), text="Cerca").pack()
+    scrollbar = Scrollbar(Trova)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    outputPre = Text(Trova, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputPre.pack()
+    scrollbar.config(command=outputPre.yview)
+
     #Esecuzione finestra
     Finestra.mainloop()

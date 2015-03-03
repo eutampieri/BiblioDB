@@ -11,39 +11,40 @@ def FixDB():
     isbnAuthor={}
     fileName=""
     borrowtime=30
+    nerrori=0
+    wrongisbn=""
     ISBNborrowDate = {}
-    ISBNown = {}
     try:
-    	o=open('bibliodb.json')
+        o=open('bibliodb.json')
     except IOError:
-        o = open('bibliodb.json', 'w')
-        json.dump(
-            (ISBNuse,
-             isbnPos,
-             titleIsbn,
-             isbnTitle,
-             isbnAuthor,
-             nomeFile,
-             ISBNown,
-             borrowTime,
-             ISBNborrowDate),
-            o)
+        o=open('bibliodb.json','w')
+        json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),o)
+        o.close()
     else:
-    	o.close
+        o.close
     finally:
         with open('bibliodb.json','r') as o:
                         ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate=json.load(o)
                         o.close
-    def ISBNTotit(tISBN):
-        titP=isbnTitle[tISBN]
-        return titP
-        pass
-    for isbn, num in isbnTitle.items():
-        ISBNown[isbn]="Biblioteca"
-    for isbn, num in isbnTitle.items():
-        ISBNuse[isbn]=1
+    try:
+        for isbn, num in isbnTitle.items():
+            wrongisbn=isbn
+            isbnTitle[isbn]=num.lower()
+            ISBNown[isbn]="Biblioteca"
+            ISBNuse[isbn]=1
+            isbnAuthor[isbn]=isbnAuthor[isbn].lower()
+            isbnPos[isbn]=isbnPos[isbn].upper()
+    except KeyError:
+        nerrori=nerrori+1
+        print "ERRORE N "+str(nerrori)
+        print wrongisbn
+        try:
+            print isbnTitle[wrongisbn]
+        except KeyError:
+            print "Non esiste il titolo!"
     s=open('bibliodb.json','w')
     json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),s)
     s.close()
     print 'DB corretto!'
+
 FixDB()
