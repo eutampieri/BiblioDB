@@ -9,7 +9,7 @@ def FixDB():
     isbnTitle={}
     #Dizionario contenente l'autore in relazione all'ISBN
     isbnAuthor={}
-    fileName=""
+    fileName="libri"
     borrowtime=30
     nerrori=0
     wrongisbn=""
