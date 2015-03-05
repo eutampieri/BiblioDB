@@ -129,6 +129,7 @@ def ISBNToAut(aISBN):
 
 
 def prestaISBN(pISBN, state, owner):
+    pISBN=pISBN.upper()
     strPrestito = ""
     # try:
     oldOwner = ISBNown[pISBN]
@@ -309,6 +310,11 @@ def GUI():
     t = Entry(prestito)
     t.pack()
     t.insert(0, "Codice Tessera")
+    scrollbar = Scrollbar(prestito)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    outputPre = Text(prestito, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputPre.pack()
+    scrollbar.config(command=outputPre.yview)
     Button(
         prestito,
         command=lambda: outputPre.insert(
@@ -320,11 +326,6 @@ def GUI():
                 por.get(),
                 t.get())),
         text="Presta").pack()
-    scrollbar = Scrollbar(prestito)
-    scrollbar.pack(side=RIGHT, fill=Y)
-    outputPre = Text(prestito, wrap=WORD, yscrollcommand=scrollbar.set)
-    outputPre.pack()
-    scrollbar.config(command=outputPre.yview)
 
     ###########################################
     # Scheda Aggiunta

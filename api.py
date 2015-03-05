@@ -150,6 +150,17 @@ app = Flask(__name__)
 def isbnTitolo(isbn):
 	resp=Response(response=ISBNTotit(str(isbn).upper()).title(), status=200,mimetype="text/plain")
 	return resp
+@app.route('/isbninfo/scheda/<titolo>')
+def scheda(titolo):
+	resp=""
+	try:
+		isbn=titToISBN(titolo.lower())
+	except KeyError:
+		resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+	else:
+		resp=Response(response="Titolo: "+ISBNTotit(str(isbn).upper()).title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper(), status=200,mimetype="text/plain")
+	finally:
+		return resp
 @app.route('/isbninfo/isbn/<titolo>')
 def TitoloIsbn(titolo):
 	resp=Response(response=IStitToISBN(str(titolo).lower()).title(), status=200,mimetype="text/plain")
@@ -185,4 +196,3 @@ def Welcome():
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
-	print TitoloIsbn("Eneide")

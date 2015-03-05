@@ -2,7 +2,7 @@
 <html><head>
   <meta charset="utf-8">
   
-  <title>Guida</title><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BiblioDB</title><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
@@ -21,6 +21,7 @@
   <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
   <!-- For iPhone 6 Plus with @3× display: -->
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+  <link rel="icon" href="favicon.ico">
   <link href="css/codiqa.ext.min.css" rel="stylesheet">
   <link href="css/jquery.mobile-1.3.1.min.css" rel="stylesheet">
 
@@ -29,6 +30,28 @@
   <script src="js/codiqa.ext.min.js"></script>
   <script src="js/et-software.js"></script></head>
 <body>
+    <script type="text/javascript">
+    var ip="127.0.0.1"//Modificare l'IP con quello del server
+    function cerca(){
+      document.getElementById("cercaBox").data="http://"+ip+":5000/isbninfo/scheda/"+document.getElementById('textinput2').value ;
+    if(navigator.platform="iP(hone|ad|od)"){
+      document.getElementById("listaBox").width=(screen.availWidth-20);
+    }
+    else{
+      document.getElementById("listaBox").width=((screen.availWidth/window.devicePixelRatio)-20);
+    }
+  }
+    function lista(){
+      document.getElementById("listaBox").data="http://"+ip+":5000/lista";
+        if(navigator.platform="iP(hone|ad|od)"){
+          document.getElementById("listaBox").width=(screen.availWidth-20);
+        }
+        else{
+          document.getElementById("listaBox").width=((screen.availWidth/window.devicePixelRatio)-20);
+        }
+      }
+    </script>
+
 <div data-role="page" data-control-title="Home" id="page1">
     <div data-theme="a" data-role="header" data-position="fixed">
         <h3>
@@ -41,7 +64,7 @@
         </div>
         <div data-controltype="textblock">
             <p>
-                Benvenuto a BiblioDB
+                Benvenuto in BiblioDB
                 <br>
             </p>
             <p>
@@ -88,21 +111,18 @@
         </h3>
     </div>
     <div data-role="content">
-        <form action="">
-            <div data-role="fieldcontain" data-controltype="textinput">
+        <form action="" id="frm1">
+            <div data-role="fieldcontain" data-controltype="textinput" id=titolo>
                 <label for="textinput2">
                     Titolo
                 </label>
                 <input name="" id="textinput2" placeholder="" value="" type="text">
             </div>
-            <input value="Cerca" type="submit">
-        </form>
-        <div id="ricercaLibri" data-controltype="textblock">
-            <p>
-                Compila il form...
-                <br>
-            </p>
-        </div>
+            <a data-role="button" onclick="cerca()">
+                Cerca
+            </a>
+            </form>
+            <object id="cercaBox" type="text/plain" border="0"></object>
     </div>
     <div data-role="tabbar" data-iconpos="top" data-theme="a">
         <ul>
@@ -131,15 +151,16 @@
         </h3>
     </div>
     <div data-role="content">
-        <a data-role="button" href="#page3">
+        <a data-role="button" onclick="lista()">
             Ottieni lista
         </a>
-        <div data-controltype="textblock">
+        <!--div data-controltype="textblock" id="listaBox">
             <p>
                 Aspetta...
                 <br>
             </p>
-        </div>
+        </div-->
+        <object id="listaBox" type="text/plain" border="0" class="internal,box"></object>
     </div>
     <div data-role="tabbar" data-iconpos="top" data-theme="a">
         <ul>
