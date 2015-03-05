@@ -98,7 +98,7 @@ def GUIadd(titolo, autore, isbn, pos):
 
 def find(mode, string):
     if mode == 1:
-        isbnCode = string
+        isbnCode = string.upper()
     elif mode == 2:
         isbnCode = titToISBN(string.lower())
     pos = isbnPos[isbnCode].upper()
@@ -381,7 +381,7 @@ def GUI():
     s.insert(0, "ISBN o Titolo")
     Button(
         Trova,
-        command=lambda: outputPre.insert(
+        command=lambda: outputRic.insert(
             INSERT,
             find(
                 modo.get(),
@@ -389,9 +389,9 @@ def GUI():
         text="Cerca").pack()
     scrollbar = Scrollbar(Trova)
     scrollbar.pack(side=RIGHT, fill=Y)
-    outputPre = Text(Trova, wrap=WORD, yscrollcommand=scrollbar.set)
-    outputPre.pack()
-    scrollbar.config(command=outputPre.yview)
+    outputRic = Text(Trova, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputRic.pack()
+    scrollbar.config(command=outputRic.yview)
 
     # Esecuzione finestra
     Finestra.mainloop()

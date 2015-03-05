@@ -21,63 +21,15 @@ ISBNborrowDate = {}
 nomeFile = "db_libri"
 borrowTime = 30
 try:
-    response = urllib2.urlopen('http://192.168.1.22:5000/json')
+    response = urllib2.urlopen('http://127.0.0.1:5000/json')
 except urllib2.HTTPError:
     print "Errore Internet"
 else:
     print "OK"
 finally:
-    response = urllib2.urlopen('http://192.168.1.22:5000/json')
+    response = urllib2.urlopen('http://127.0.0.1:5000/json')
     newJSON=response.read()
     ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.loads(newJSON)
-
-
-def add():
-    titolo = raw_input("Titolo: ").lower()
-    autore = raw_input("Autore: ").lower()
-    isbn = raw_input("ISBN o ID volume: ")
-    pos = raw_input("La posizione: ")
-    isbnPos[isbn] = pos
-    titleIsbn[titolo] = isbn
-    isbnTitle[isbn] = titolo
-    isbnAuthor[isbn] = autore
-    ISBNown[isbn] = "Biblioteca"
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
-    pass
-
-
-def GUIadd(titolo, autore, isbn, pos):
-    isbnPos[isbn] = pos
-    titleIsbn[titolo] = isbn
-    isbnTitle[isbn] = titolo
-    isbnAuthor[isbn] = autore
-    ISBNown[isbn] = "Biblioteca"
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
-    pass
 
 
 def find(mode, string):
@@ -112,61 +64,10 @@ def ISBNToAut(aISBN):
     return autP
 
 
-def prestaISBN(pISBN, state, owner):
-    strPrestito = ""
-    # try:
-    oldOwner = ISBNown[pISBN]
-    ISBNuse[pISBN] = state
-    ISBNown[pISBN] = owner
-    data_prestito = datetime.today().strftime('%d/%m/%Y')
-    data_fine = datetime.today() + timedelta(days=borrowTime)
-    res = data_fine.strftime('%d/%m/%Y')
-    ISBNborrowDate[pISBN] = data_prestito
-    strPrestito = strPrestito + "Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(
-        pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
-    if state == 0:
-        strPrestito = strPrestito + "Prestato a: " + owner + '\n'
-        strPrestito = strPrestito + "RENDERE ENTRO:\n"
-        strPrestito = strPrestito + res + '\n'
-    elif state == 1:
-        strPrestito = strPrestito + "Reso da: " + oldOwner + '\n'
-        ISBNown[pISBN] = "Biblioteca"
-        strPrestito = strPrestito + "Prestato il: " + \
-            ISBNborrowDate[pISBN] + '\n'
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
-    # except KeyError:
-    #   print"ERRORE"
-    return strPrestito
-
-
-def manageISBN():
-    todoP = raw_input("Si preferisce usare l'ISBN o il titolo? ").lower()
-    if todoP.lower() == 'isbn':
-        isbn = raw_input("ISBN: ")
-    else:
-        titolo = raw_input("Titolo: ").lower()
-        isbn = titToISBN(titolo)
-    own = raw_input("Codice tessera: ")
-    stato = input("Inserisci 0 per prestare il titolo, 1 per la resa. ")
-    print prestaISBN(isbn, stato, own)
-
-
 def main():
     print "VERSIONE DI CONSULTAZIONE. NON E POSSIBILE APPORTARE MODIFICHE"
     while True:
-        print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;\n* 'i' per aprire il menu di impostazioni;"
+        print "Scrivi:\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;"
         todoM = raw_input("* 'q' per uscire\n: ").lower()
         if todoM == 's':
             manageISBN()
@@ -176,15 +77,6 @@ def main():
             tsvExport(nomeFile)
         elif todoM.lower() == 'q':
             break
-        elif todoM.lower() == 'i':
-            iInput = raw_input(
-                "Scrivi 'e' per eliminare un libro, 'f' per cambiare il nome del file TSV o 'g' per cambiare il numero di giorni dei prestiti.").lower()
-            if iInput == 'e':
-                deleteBook()
-            elif iInput == 'f':
-                setDbName()
-            else:
-                print "ERRORE"
         else:
             print"ERRORE"
 
@@ -295,7 +187,7 @@ def GUI():
     s.insert(0, "ISBN o Titolo")
     Button(
         Trova,
-        command=lambda: outputPre.insert(
+        command=lambda: outputRic.insert(
             INSERT,
             find(
                 modo.get(),
@@ -303,9 +195,9 @@ def GUI():
         text="Cerca").pack()
     scrollbar = Scrollbar(Trova)
     scrollbar.pack(side=RIGHT, fill=Y)
-    outputPre = Text(Trova, wrap=WORD, yscrollcommand=scrollbar.set)
-    outputPre.pack()
-    scrollbar.config(command=outputPre.yview)
+    outputRic = Text(Trova, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputRic.pack()
+    scrollbar.config(command=outputRic.yview)
 
     # Esecuzione finestra
     Finestra.mainloop()
