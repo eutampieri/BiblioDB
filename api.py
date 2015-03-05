@@ -193,9 +193,6 @@ def tsvGetter():
 @app.route('/')
 def Welcome():
 	return"<html><head><title>BiblioDB API</title></head><body><h1>Benvenuti in BiblioDB!</h1><br><p>Per utilizzare l'api e' necessario modificare l'URL.</p></body></html"
-
-if __name__ == '__main__':
-	app.run(host='0.0.0.0')
 @app.route('/update')
 def update():
 	ISBNuse = {}
@@ -234,4 +231,7 @@ def update():
 		with open('bibliodb.json', 'r') as o:
 			ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.load(
 				o)
-			o.close
+			o.close()
+		return "<h1>Il DataBase e stato aggiornato!</h1>"
+if __name__ == '__main__':
+	app.run(host='0.0.0.0')
