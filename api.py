@@ -196,3 +196,42 @@ def Welcome():
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
+@app.route('/update')
+def update():
+	ISBNuse = {}
+	# Dizionario che contiene le informazioni sullo stato dell'ISBN
+	isbnPos = {}
+	# Dizionario contenente l'ISBN in relazione alla posizione del volume
+	titleIsbn = {}
+	# Dizionario contenente il titolo in relazione all'ISBN
+	isbnTitle = {}
+	# Dizionario contenente l'autore in relazione all'ISBN
+	isbnAuthor = {}
+	# Dizionario contenente il proprietario in relazione all'ISBN
+	ISBNown = {}
+	ISBNborrowDate = {}
+	nomeFile = "db_libri"
+	borrowTime = 30
+	try:
+		o = open('bibliodb.json', 'r')
+	except IOError:
+		o = open('bibliodb.json', 'w')
+		json.dump(
+			(ISBNuse,
+			 isbnPos,
+			 titleIsbn,
+			 isbnTitle,
+			 isbnAuthor,
+			 nomeFile,
+			 ISBNown,
+			 borrowTime,
+			 ISBNborrowDate),
+			o)
+		o.close()
+	else:
+		o.close
+	finally:
+		with open('bibliodb.json', 'r') as o:
+			ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.load(
+				o)
+			o.close

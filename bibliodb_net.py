@@ -21,15 +21,16 @@ ISBNborrowDate = {}
 nomeFile = "db_libri"
 borrowTime = 30
 try:
-    response = urllib2.urlopen('http://127.0.0.1:5000/json')
+    response = urllib2.urlopen('https://www.googleapis.com/books/v1/volumes?q=la%20fata%20carabina')
 except urllib2.HTTPError:
     print "Errore Internet"
 else:
     print "OK"
 finally:
-    response = urllib2.urlopen('http://127.0.0.1:5000/json')
+    response = urllib2.urlopen('https://www.googleapis.com/books/v1/volumes?q=la%20fata%20carabina')
     newJSON=response.read()
-    ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.loads(newJSON)
+    ISBNuse, isbnPos, titleIsbn, = json.loads(newJSON)
+    print ISBNuse[items]
 
 
 def find(mode, string):

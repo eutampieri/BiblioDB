@@ -31,7 +31,13 @@
   <script src="js/et-software.js"></script></head>
 <body>
     <script type="text/javascript">
-    var ip="127.0.0.1"//Modificare l'IP con quello del server
+    $(document).ready(function(){
+
+    $("#cercaBox").width($("#cont").width());
+    $("#cercaBox").height($("#cont").height());
+
+});
+    var ip="192.168.1.22"//Modificare l'IP con quello del server
     function cerca(){
       document.getElementById("cercaBox").data="http://"+ip+":5000/isbninfo/scheda/"+document.getElementById('textinput2').value ;
     if(navigator.platform="iP(hone|ad|od)"){
@@ -122,7 +128,8 @@
                 Cerca
             </a>
             </form>
-            <object id="cercaBox" type="text/plain" border="0"></object>
+            <div id="cont">
+            <object id="cercaBox" type="text/plain" border="0"></object></div>
     </div>
     <div data-role="tabbar" data-iconpos="top" data-theme="a">
         <ul>
@@ -150,7 +157,7 @@
             Lista Libri
         </h3>
     </div>
-    <div data-role="content">
+    <div data-role="content" style="height:100%;">
         <a data-role="button" onclick="lista()">
             Ottieni lista
         </a>
@@ -160,7 +167,7 @@
                 <br>
             </p>
         </div-->
-        <object id="listaBox" type="text/plain" border="0" class="internal,box"></object>
+        <object id="listaBox" type="text/plain" border="0" class="internal,box" style="height:100%;"></object>
     </div>
     <div data-role="tabbar" data-iconpos="top" data-theme="a">
         <ul>
