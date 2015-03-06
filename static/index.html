@@ -31,12 +31,6 @@
   <script src="js/et-software.js"></script></head>
 <body>
     <script type="text/javascript">
-    $(document).ready(function(){
-
-    $("#cercaBox").width($("#cont").width());
-    $("#cercaBox").height($("#cont").height());
-
-});
     var ip="192.168.1.22"//Modificare l'IP con quello del server
     function cerca(){
       document.getElementById("cercaBox").data="http://"+ip+":5000/isbninfo/scheda/"+document.getElementById('textinput2').value ;
