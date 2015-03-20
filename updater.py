@@ -6,7 +6,7 @@ def update():
 	actualVersion=100
 	try:
 		version = urllib2.urlopen(url)
-		gitVersion=float(version)
+		gitVersion=float(version.read())
 	except:
 		return "Non riesco a ottenere\nla lista delle versioni\na causa di un\nErrore Internet"
 	else:
@@ -23,7 +23,7 @@ def Cupdate():
 	actualVersion=100
 	try:
 		version = urllib2.urlopen(url)
-		gitVersion=float(version)
+		gitVersion=float(version.read())
 	except:
 		return "Non riesco a ottenere la lista delle versioni a causa di un Errore Internet"
 	else:
