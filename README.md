@@ -36,7 +36,7 @@ When used in Server Mode, BiblioDB provides a REST API and a JQuery Mobile WebAp
 * */qrcode.png* returns a Qr Code containing the webapp's url. If the server isn't connected to the internet it gives the following:
 ```html
         <h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>
-        ```
+```
 * */add/<user>/<password>/<title>/<isbn>/<author>/<position>* adds a book to the library. The password is sent in SHA512 format
 * *presta/<user>/<password>/<isbn>/<LibraryUserID>/<Status>* lends a book. The password is sent in SHA512 format, LibraryUserID is the person who you lend the book and Status is the book state: 0 to lent and 1 to return books.
 
