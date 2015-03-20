@@ -9,6 +9,8 @@ from Crypto.Cipher import AES
 import base64
 import os
 from datetime import date, datetime, time, timedelta
+from updater import Cupdate
+Cupdate()
 # the block size for the cipher object; must be 16, 24, or 32 for AES
 BLOCK_SIZE = 32
  
@@ -24,8 +26,7 @@ pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
 # encrypt with AES, encode with base64
 EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
 DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).rstrip(PADDING)
- 
-# generate a random secret key
+
 try:
 	secret=os.popen("./jsonvalidator.out").read()
 except:
@@ -279,7 +280,7 @@ def QrCode():
 		return Response(response=qr, status=200,mimetype="image/png")
 	#print url
 	except:
-		return "<h1>Errore</h1><p>Connettere il computer ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
+		return "<h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
 @app.route('/add/<user>/<password>/<titolo>/<isbn>/<autore>/<posizione>')
 def addBook(user,password,titolo,isbn,autore,posizione):
 	err401="<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
