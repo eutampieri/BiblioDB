@@ -1,14 +1,16 @@
-#!/usr/bin/env python# Versione 0.3
-# Changelog:
-# *Ora l'app utilizza Tkinter!
-# *Nuova grafica a frames
+#!/usr/bin/env python
+# Versione 1.0.0
 import json
 from setDbName import setDbName
 from deleteBook import deleteBook
 from setBorrowTime import setBorrowTime
 from datetime import date, datetime, time, timedelta
+from updater import update, Cupdate
 from Tkinter import *
 from ttk import *
+from updater import update, Cupdate
+from Crypto.Hash import SHA512
+import getpass
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -97,6 +99,8 @@ def GUIadd(titolo, autore, isbn, pos):
 
 
 def find(mode, string):
+    isbnCode = ""
+    mode = int(mode)
     if mode == 1:
         isbnCode = string.upper()
     elif mode == 2:
@@ -108,28 +112,8 @@ def find(mode, string):
     return toReturn
 
 
-def titToISBN(tit):
-    try:
-        Isbn = titleIsbn[tit]
-    except KeyError:
-        Isbn = 0
-    return Isbn
-    pass
-
-
-def ISBNTotit(tISBN):
-    titP = isbnTitle[tISBN]
-    return titP
-    pass
-
-
-def ISBNToAut(aISBN):
-    autP = isbnAuthor[aISBN]
-    return autP
-
-
 def prestaISBN(pISBN, state, owner):
-    pISBN=pISBN.upper()
+    pISBN = pISBN.upper()
     strPrestito = ""
     # try:
     oldOwner = ISBNown[pISBN]
@@ -168,10 +152,30 @@ def prestaISBN(pISBN, state, owner):
     return strPrestito
 
 
+def titToISBN(tit):
+    try:
+        Isbn = titleIsbn[tit]
+    except KeyError:
+        Isbn = 0
+    return Isbn
+    pass
+
+
+def ISBNTotit(tISBN):
+    titP = isbnTitle[tISBN.upper()]
+    return titP
+    pass
+
+
+def ISBNToAut(aISBN):
+    autP = isbnAuthor[aISBN.upper()]
+    return autP
+
+
 def manageISBN():
     todoP = raw_input("Si preferisce usare l'ISBN o il titolo? ").lower()
     if todoP.lower() == 'isbn':
-        isbn = raw_input("ISBN: ")
+        isbn = raw_input("ISBN: ").upper()
     else:
         titolo = raw_input("Titolo: ").lower()
         isbn = titToISBN(titolo)
@@ -181,11 +185,14 @@ def manageISBN():
 
 
 def main():
+    print Cupdate()
     while True:
-        print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;\n* 'i' per aprire il menu di impostazioni;"
+        print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'c' per cercare un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;"
         todoM = raw_input("* 'q' per uscire\n: ").lower()
         if todoM == 's':
             manageISBN()
+            usercli = ""
+            passwordcli = ""
         elif todoM.lower() == 'l':
             print lista()
         elif todoM.lower() == 'x':
@@ -193,16 +200,18 @@ def main():
         elif todoM.lower() == 'q':
             break
         elif todoM.lower() == 'a':
-            add()
-        elif todoM.lower() == 'i':
-            iInput = raw_input(
-                "Scrivi 'e' per eliminare un libro, 'f' per cambiare il nome del file TSV o 'g' per cambiare il numero di giorni dei prestiti.").lower()
-            if iInput == 'e':
-                deleteBook()
-            elif iInput == 'f':
-                setDbName()
-            else:
-                print "ERRORE"
+            usercli = raw_input("Utente: ")
+            passwordcli = getpass.getpass("Password: ")
+            titolo = raw_input("Titolo: ").lower()
+            autore = raw_input("Autore: ").lower()
+            isbn = raw_input("ISBN o ID volume: ")
+            pos = raw_input("La posizione: ")
+            print add(usercli, passwordcli, titolo, autore, isbn, pos)
+        elif todoM.lower() == 'c':
+            searchToDo = raw_input(
+                "Inserire 1 per utilizzare l'ISBN, 2 per il titolo.\n")
+            tsrc = raw_input("Termine da cercare: ")
+            print find(searchToDo, tsrc)
         else:
             print"ERRORE"
 
@@ -242,6 +251,21 @@ def ISBNoTit(text, type):
         return titToISBN(text)
 
 
+def MsgBox(text):
+    msgBox = Tk()
+    lI = Label(
+        msgBox,
+        text=text,
+        font=(
+            "Helvetica",
+            12),
+        justify=CENTER)
+    lI.pack()
+    Button(msgBox, command=lambda: msgBox.destroy(), text="OK").pack()
+    msgBox.mainloop()
+    pass
+
+
 def GuiInfos():
     info = Tk()
     w = Label(
@@ -256,6 +280,7 @@ def GuiInfos():
 
 
 def GUI():
+    MsgBox(update())
     ###########################################
     # Finestra Generale
     ###########################################

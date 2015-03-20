@@ -3,8 +3,8 @@
   <meta charset="utf-8">
   
   <title>BiblioDB</title><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!--   meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"-->
   <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png"><!-- 57×57px -->
   <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS = 6: -->
@@ -31,7 +31,26 @@
   <script src="js/et-software.js"></script></head>
 <body>
     <script type="text/javascript">
-    var ip="192.168.1.22"//Modificare l'IP con quello del server
+    var ip="192.168.1.51"//Modificare l'IP con quello del server
+    //  var a=document.getElementsByClassName("page1");
+    //  for(var i=0;i<a.length;i++) {
+    // //     if(!a[i].onclick && a[i].getAttribute("target") != "_blank") {
+    // //         a[i].onclick=function() {
+    // //                 a[i].href=;
+    // //                 return false; 
+    // //         }
+    // //     }
+    //   a[i].href="http://"+ip+":5000/static/index.html"
+    // }
+    // var b=document.getElementsByClassName("page2");
+    // for(var i=0;i<b.length;i++) {
+    //   b[i].href="http://"+ip+":5000/static/page2.html"
+    // }
+    // var c=document.getElementsByClassName("page3");
+    // for(var i=0;i<c.length;i++) {
+    //   c[i].href="http://"+ip+":5000/static/page3.html"
+    // }
+
     function cerca(){
       document.getElementById("cercaBox").data="http://"+ip+":5000/isbninfo/scheda/"+document.getElementById('textinput2').value ;
     if(navigator.platform="iP(hone|ad|od)"){
@@ -87,96 +106,17 @@
     <div data-role="tabbar" data-iconpos="top" data-theme="a">
         <ul>
             <li>
-                <a href="index.html#page1" data-transition="fade" data-theme="" data-icon="home">
+                <a class="page1" data-transition="fade" data-theme="" data-icon="home">
                     Home
                 </a>
             </li>
             <li>
-                <a href="index.html#page2" data-transition="fade" data-theme="" data-icon="search">
+                <a href="page2.html" data-transition="fade" data-theme="" data-icon="search">
                     Ricerca
                 </a>
             </li>
             <li>
-                <a href="index.html#page3" data-transition="fade" data-theme="" data-icon="info">
-                    Lista Libri
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-<div data-role="page" data-control-title="Ricerca" id="page2">
-    <div data-theme="a" data-role="header" data-position="fixed">
-        <h3>
-            Cerca Libro
-        </h3>
-    </div>
-    <div data-role="content">
-        <form action="" id="frm1">
-            <div data-role="fieldcontain" data-controltype="textinput" id=titolo>
-                <label for="textinput2">
-                    Titolo
-                </label>
-                <input name="" id="textinput2" placeholder="" value="" type="text">
-            </div>
-            <a data-role="button" onclick="cerca()">
-                Cerca
-            </a>
-            </form>
-            <div id="cont">
-            <object id="cercaBox" type="text/plain" border="0"></object></div>
-    </div>
-    <div data-role="tabbar" data-iconpos="top" data-theme="a">
-        <ul>
-            <li>
-                <a href="index.html#page1" data-transition="fade" data-theme="" data-icon="home">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a href="index.html#page2" data-transition="fade" data-theme="" data-icon="search">
-                    Ricerca
-                </a>
-            </li>
-            <li>
-                <a href="index.html#page3" data-transition="fade" data-theme="" data-icon="info">
-                    Lista Libri
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-<div data-role="page" data-control-title="Lista Libri" id="page3">
-    <div data-theme="" data-role="header" data-position="fixed">
-        <h3>
-            Lista Libri
-        </h3>
-    </div>
-    <div data-role="content" style="height:100%;">
-        <a data-role="button" onclick="lista()">
-            Ottieni lista
-        </a>
-        <!--div data-controltype="textblock" id="listaBox">
-            <p>
-                Aspetta...
-                <br>
-            </p>
-        </div-->
-        <object id="listaBox" type="text/plain" border="0" class="internal,box" style="height:100%;"></object>
-    </div>
-    <div data-role="tabbar" data-iconpos="top" data-theme="a">
-        <ul>
-            <li>
-                <a href="index.html#page1" data-transition="fade" data-theme="" data-icon="home">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a href="index.html#page2" data-transition="fade" data-theme="" data-icon="search">
-                    Ricerca
-                </a>
-            </li>
-            <li>
-                <a href="index.html#page3" data-transition="fade" data-theme="" data-icon="info">
+                <a href="page3.html" data-transition="fade" data-theme="" data-icon="info">
                     Lista Libri
                 </a>
             </li>

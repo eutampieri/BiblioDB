@@ -1,11 +1,12 @@
-#!/usr/bin/env python# Versione 0.3
-# Changelog:
-# *Ora l'app utilizza Tkinter!
-# *Nuova grafica a frames
+#!/usr/bin/env python
+# Versione 1.0.0
 import urllib2
 import json
 from Tkinter import *
 from ttk import *
+from updater import update, Cupdate
+from Crypto.Hash import SHA512
+import getpass
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -20,22 +21,44 @@ ISBNown = {}
 ISBNborrowDate = {}
 nomeFile = "db_libri"
 borrowTime = 30
+Sip = 'http://127.0.0.1:5000'
 try:
-    response = urllib2.urlopen('https://www.googleapis.com/books/v1/volumes?q=la%20fata%20carabina')
-except urllib2.HTTPError:
+    response = urllib2.urlopen(Sip)
+except:
     print "Errore Internet"
+    exit()
 else:
-    print "OK"
-finally:
-    response = urllib2.urlopen('https://www.googleapis.com/books/v1/volumes?q=la%20fata%20carabina')
-    newJSON=response.read()
-    ISBNuse, isbnPos, titleIsbn, = json.loads(newJSON)
-    print ISBNuse[items]
+    response = urllib2.urlopen(Sip + '/json')
+    newJSON = response.read()
+    ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.loads(
+        newJSON)
+
+
+def add(userf, passwordf, titolof, autoref, isbnf, posizionef):
+    h = SHA512.new()
+    h.update(passwordf)
+    addResponse = urllib2.urlopen(
+        Sip +
+        '/add/' +
+        str(userf) +
+        '/' +
+        h.hexdigest() +
+        '/' +
+        str(titolof) +
+        '/' +
+        str(isbnf) +
+        '/' +
+        str(autoref) +
+        '/' +
+        str(posizionef))
+    return addResponse.read()
 
 
 def find(mode, string):
+    isbnCode = ""
+    mode = int(mode)
     if mode == 1:
-        isbnCode = string
+        isbnCode = string.upper()
     elif mode == 2:
         isbnCode = titToISBN(string.lower())
     pos = isbnPos[isbnCode].upper()
@@ -43,6 +66,24 @@ def find(mode, string):
     toReturn = "----------------------------------\nTitolo:\t" + titoloOpera + "\nISBN:\t" + isbnCode + \
         "\nAutore:\t" + ISBNToAut(isbnCode).title() + "\nPosizione:\t" + pos + "\n----------------------------------\n"
     return toReturn
+
+
+def prestaISBN(userP, passwordP, isbnP, idP, statoP):
+    h = SHA512.new()
+    h.update(passwordP)
+    response = urllib2.urlopen(
+        Sip +
+        '/presta/' +
+        str(userP) +
+        '/' +
+        h.hexdigest() +
+        '/' +
+        str(isbnP) +
+        '/' +
+        str(idP) +
+        '/' +
+        str(statoP))
+    return response.read()
 
 
 def titToISBN(tit):
@@ -55,29 +96,60 @@ def titToISBN(tit):
 
 
 def ISBNTotit(tISBN):
-    titP = isbnTitle[tISBN]
+    titP = isbnTitle[tISBN.upper()]
     return titP
     pass
 
 
 def ISBNToAut(aISBN):
-    autP = isbnAuthor[aISBN]
+    autP = isbnAuthor[aISBN.upper()]
     return autP
 
 
+def manageISBN():
+    usercli = raw_input("Utente: ")
+    passwordcli = getpass.getpass("Password: ")
+    todoP = raw_input("Si preferisce usare l'ISBN o il titolo? ").lower()
+    if todoP.lower() == 'isbn':
+        isbn = raw_input("ISBN: ").upper()
+    else:
+        titolo = raw_input("Titolo: ").lower()
+        isbn = titToISBN(titolo)
+    own = raw_input("Codice tessera: ")
+    stato = input("Inserisci 0 per prestare il titolo, 1 per la resa. ")
+    print prestaISBN(usercli, passwordcli, isbn, own, stato)
+    usercli = ""
+    passwordcli = ""
+
+
 def main():
-    print "VERSIONE DI CONSULTAZIONE. NON E POSSIBILE APPORTARE MODIFICHE"
+    print Cupdate()
     while True:
-        print "Scrivi:\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;"
+        print "Scrivi:\n* 's' per cambiare stato ad un volume;\n* 'c' per cercare un volume;\n* 'a' per aggiungerne uno;\n* 'x' per generare un file TSV;\n* 'l' per ottenere una lista dei libri registrati;"
         todoM = raw_input("* 'q' per uscire\n: ").lower()
         if todoM == 's':
             manageISBN()
+            usercli = ""
+            passwordcli = ""
         elif todoM.lower() == 'l':
             print lista()
         elif todoM.lower() == 'x':
             tsvExport(nomeFile)
         elif todoM.lower() == 'q':
             break
+        elif todoM.lower() == 'a':
+            usercli = raw_input("Utente: ")
+            passwordcli = getpass.getpass("Password: ")
+            titolo = raw_input("Titolo: ").lower()
+            autore = raw_input("Autore: ").lower()
+            isbn = raw_input("ISBN o ID volume: ")
+            pos = raw_input("La posizione: ")
+            print add(usercli, passwordcli, titolo, autore, isbn, pos)
+        elif todoM.lower() == 'c':
+            searchToDo = raw_input(
+                "Inserire 1 per utilizzare l'ISBN, 2 per il titolo.\n")
+            tsrc = raw_input("Termine da cercare: ")
+            print find(searchToDo, tsrc)
         else:
             print"ERRORE"
 
@@ -117,6 +189,35 @@ def ISBNoTit(text, type):
         return titToISBN(text)
 
 
+def GuiAdd(userf, passwordf, titolof, autoref, isbnf, posizionef):
+    addW = Tk()
+    resp = add(userf, passwordf, titolof, autoref, isbnf, posizionef)
+    aw = Label(
+        addW,
+        text=resp,
+        font=(
+            "Helvetica",
+            12),
+        justify=CENTER)
+    aw.pack()
+    addW.mainloop()
+
+
+def MsgBox(text):
+    msgBox = Tk()
+    lI = Label(
+        msgBox,
+        text=text,
+        font=(
+            "Helvetica",
+            12),
+        justify=CENTER)
+    lI.pack()
+    Button(msgBox, command=lambda: msgBox.destroy(), text="OK").pack()
+    msgBox.mainloop()
+    pass
+
+
 def GuiInfos():
     info = Tk()
     w = Label(
@@ -131,11 +232,7 @@ def GuiInfos():
 
 
 def GUI():
-    info=Tk()
-    mainFrame=Frame(info)
-    mainFrame.pack()
-    Label(mainFrame,text="Versione di consultazione.\n Non e' possibile apportare modifiche.", font=("Helvetica",16),justify=CENTER).pack()
-    info.mainloop()
+    MsgBox(update())
     ###########################################
     # Finestra Generale
     ###########################################
@@ -154,11 +251,99 @@ def GUI():
     # Schede
     ###########################################
     n = Notebook(Finestra)
+    prestito = Frame(n)  # first page, which would get widgets gridded into it
+    aggiungi = Frame(n)  # second page
     Frlista = Frame(n)  # second page
     Trova = Frame(n)
+    n.add(prestito, text='Presta Libri')
+    n.add(aggiungi, text='Aggiungi Libro')
     n.add(Frlista, text='Lista Libri')
     n.add(Trova, text="Ricerca Libro")
     n.pack()
+    ###########################################
+    # Scheda Prestito
+    ###########################################
+    por = IntVar()
+    Radiobutton(
+        prestito,
+        text="Prestare",
+        variable=por,
+        value=0).pack(
+        anchor=W)
+    Radiobutton(
+        prestito,
+        text="Rientrare",
+        variable=por,
+        value=1).pack(
+        anchor=W)
+    v = IntVar()
+    Radiobutton(prestito, text="ISBN", variable=v, value=1).pack(anchor=W)
+    Radiobutton(prestito, text="Titolo", variable=v, value=2).pack(anchor=W)
+    UserP = Entry(prestito)
+    UserP.pack()
+    UserP.insert(0, "Nome Utente")
+    PasswordP = Entry(prestito, show="*")
+    PasswordP.pack()
+    PasswordP.insert(0, "Password")
+
+    e = Entry(prestito)
+    e.pack()
+    e.insert(0, "ISBN o Titolo")
+    w = Label(prestito, text="Codice Tessera:")
+    w.pack()
+    t = Entry(prestito)
+    t.pack()
+    t.insert(0, "Codice Tessera")
+    scrollbar = Scrollbar(prestito)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    outputPre = Text(prestito, wrap=WORD, yscrollcommand=scrollbar.set)
+    outputPre.pack()
+    scrollbar.config(command=outputPre.yview)
+    Button(
+        prestito,
+        command=lambda: outputPre.insert(
+            INSERT,
+            prestaISBN(str(UserP.get()), str(PasswordP.get()),
+                       str(ISBNoTit(
+                           e.get(),
+                           v.get())),
+                       str(t.get()),
+                       str(por.get()))),
+        text="Presta").pack()
+
+    ###########################################
+    # Scheda Aggiunta
+    ###########################################
+    etiAddT = Label(aggiungi, text="Compila il modulo:")
+    etiAddT.pack()
+    user = Entry(aggiungi)
+    user.pack()
+    user.insert(0, "Nome Utente")
+    password = Entry(aggiungi, show="*")
+    password.pack()
+    password.insert(0, "Password")
+    titolo = Entry(aggiungi)
+    titolo.pack()
+    titolo.insert(0, "Titolo")
+    autore = Entry(aggiungi)
+    autore.pack()
+    autore.insert(0, "Autore")
+    isbn = Entry(aggiungi)
+    isbn.pack()
+    isbn.insert(0, "ISBN o ID")
+    posiz = Entry(aggiungi)
+    posiz.pack()
+    posiz.insert(0, "Posizione")
+    Button(
+        aggiungi,
+        command=lambda: GuiAdd(
+            user.get(),
+            password.get(),
+            titolo.get(),
+            autore.get(),
+            isbn.get(),
+            posiz.get()),
+        text="Aggiungi").pack()
     ###########################################
     # Scheda Lista
     ###########################################
