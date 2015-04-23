@@ -1,0 +1,25 @@
+<html>
+<head>
+	<!--style type="text/css">
+	.notReady{
+		display:none;
+	}
+	.ready{
+		display: default;
+	}
+	</style-->
+	<script type="text/javascript">
+	function ISBNpopulate(){
+		isbn=document.getElementById("isbn").value
+		document.getElementById("titolo").data="http://127.0.0.1:5000/gbooks/"+isbn+"/titolo";
+		document.getElementById("titolo").className="ready";
+		document.getElementById("cover").src="http://127.0.0.1:5000/gbooks/"+isbn+"/copertina";
+	}
+	</script>
+</head>
+<body>
+	<input type="text" id="isbn">
+	<a href="javascript:void(0);" onclick="ISBNpopulate()">OK</a>
+	<img id="cover">
+	<object id="titolo">
+	<object id="autore">
