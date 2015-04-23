@@ -1,126 +1,459 @@
 <!DOCTYPE html>
-<html><head>
-  <meta charset="utf-8">
-  
-  <title>BiblioDB</title><meta name="viewport" content="width=device-width, initial-scale=1">
-<!--   meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"-->
-  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png"><!-- 57×57px -->
-  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS = 6: -->
-  <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
-  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS = 7: -->
-  <link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
-  <!-- For iPhone with @2× display running iOS = 6: -->
-  <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
-  <!-- For iPhone with @2× display running iOS = 7: -->
-  <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
-  <!-- For iPad with @2× display running iOS = 6: -->
-  <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
-  <!-- For iPad with @2× display running iOS = 7: -->
-  <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
-  <!-- For iPhone 6 Plus with @3× display: -->
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
-  <link rel="icon" href="favicon.ico">
-  <link href="css/codiqa.ext.min.css" rel="stylesheet">
-  <link href="css/jquery.mobile-1.3.1.min.css" rel="stylesheet">
-
-  <script src="js/jquery-1.9.1.min.js"></script>
-  <script src="js/jquery.mobile-1.3.1.min.js"></script>
-  <script src="js/codiqa.ext.min.js"></script>
-  <script src="js/et-software.js"></script></head>
-<body>
-    <script type="text/javascript">
-    var ip="192.168.1.51"//Modificare l'IP con quello del server
-    //  var a=document.getElementsByClassName("page1");
-    //  for(var i=0;i<a.length;i++) {
-    // //     if(!a[i].onclick && a[i].getAttribute("target") != "_blank") {
-    // //         a[i].onclick=function() {
-    // //                 a[i].href=;
-    // //                 return false; 
-    // //         }
-    // //     }
-    //   a[i].href="http://"+ip+":5000/static/index.html"
-    // }
-    // var b=document.getElementsByClassName("page2");
-    // for(var i=0;i<b.length;i++) {
-    //   b[i].href="http://"+ip+":5000/static/page2.html"
-    // }
-    // var c=document.getElementsByClassName("page3");
-    // for(var i=0;i<c.length;i++) {
-    //   c[i].href="http://"+ip+":5000/static/page3.html"
-    // }
-
-    function cerca(){
-      document.getElementById("cercaBox").data="http://"+ip+":5000/isbninfo/scheda/"+document.getElementById('textinput2').value ;
-    if(navigator.platform="iP(hone|ad|od)"){
-      document.getElementById("listaBox").width=(screen.availWidth-20);
-    }
-    else{
-      document.getElementById("listaBox").width=((screen.availWidth/window.devicePixelRatio)-20);
-    }
-  }
-    function lista(){
-      document.getElementById("listaBox").data="http://"+ip+":5000/lista";
-        if(navigator.platform="iP(hone|ad|od)"){
-          document.getElementById("listaBox").width=(screen.availWidth-20);
-        }
-        else{
-          document.getElementById("listaBox").width=((screen.availWidth/window.devicePixelRatio)-20);
-        }
-      }
-    </script>
-
-<div data-role="page" data-control-title="Home" id="page1">
-    <div data-theme="a" data-role="header" data-position="fixed">
-        <h3>
-            BiblioDB
-        </h3>
-    </div>
-    <div data-role="content">
-        <div style=" text-align:center" data-controltype="image">
-            <img style="width: 200px; height: px" src="bibliodb.png">
-        </div>
-        <div data-controltype="textblock">
-            <p>
-                Benvenuto in BiblioDB
-                <br>
-            </p>
-            <p>
-                Quest'app consente di cercare i libri presenti nella biblioteca ed ottenerne
-                una lista.
-                <br>
-            </p>
-            <p>
-                Purtroppo non è possibile prestare o aggiungere libri, perché questa app
-                legge soltanto i dati ma non può scriverli
-                <br>
-            </p>
-            <p>
-                Inoltre quest'app potrà essere eseguita se connessi alla stessa rete in
-                cui risiede il server dei contenuti
-                <br>
-            </p>
-        </div>
-    </div>
-    <div data-role="tabbar" data-iconpos="top" data-theme="a">
-        <ul>
-            <li>
-                <a class="page1" data-transition="fade" data-theme="" data-icon="home">
-                    Home
-                </a>
-            </li>
-            <li>
-                <a href="page2.html" data-transition="fade" data-theme="" data-icon="search">
-                    Ricerca
-                </a>
-            </li>
-            <li>
-                <a href="page3.html" data-transition="fade" data-theme="" data-icon="info">
-                    Lista Libri
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-</body></html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>
+		BiblioDB
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+	<link rel="apple-touch-icon" href="apple-touch-icon.png"><!-- 57×57px -->
+	<!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS = 6: -->
+	<link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
+	<!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS = 7: -->
+	<link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
+	<!-- For iPhone with @2× display running iOS = 6: -->
+	<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
+	<!-- For iPhone with @2× display running iOS = 7: -->
+	<link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
+	<!-- For iPad with @2× display running iOS = 6: -->
+	<link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
+	<!-- For iPad with @2× display running iOS = 7: -->
+	<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+	<!-- For iPhone 6 Plus with @3× display: -->
+	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+	<link rel="icon" href="favicon.ico">
+	<link href="css/codiqa.ext.min.css" rel="stylesheet">
+	<link href="css/jquery.mobile-1.3.1.min.css" rel="stylesheet">
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.mobile-1.3.1.min.js"></script>
+	<script src="js/codiqa.ext.min.js"></script>
+	<script src="js/et-software.js"></script>
+	<script src="js/sha512.js"></script>
+	<script type="text/javascript">
+		var ip=window.location.hostname;
+			function cerca(){
+				var schedareq = new XMLHttpRequest();
+				schedareq.open('GET', 'http://'+ip+':5000/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
+				schedareq.send(null);
+				scheda=schedareq.responseText;
+				document.getElementById("cercaBox").innerHTML=scheda.replace(new RegExp('\r?\n','g'), '<br />');
+				var req = new XMLHttpRequest();
+				req.open('GET', 'http://'+ip+':5000/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
+				req.send(null);
+				isbn=req.responseText;
+				document.getElementById("cover").src="http://"+ip+":5000/gbooks/"+isbn+"/copertina";
+		}
+		function lista(){
+				var listareq = new XMLHttpRequest();
+				listareq.open('GET', 'http://'+ip+':5000/lista', false);
+				listareq.send(null);
+				var lista=listareq.responseText;
+				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
+		}
+		function naviga(pagina){
+			window.location.replace('http://'+ip+':5000/static/index.html#page'+pagina);
+		}
+		function parametro(){
+			//alert(window.location.search.replace("?", ""));
+		}
+		var user="";
+		var password="";
+		function login(){
+			user=document.getElementById("textinput4").value;
+			password = CryptoJS.SHA512(document.getElementById("textinput3").value);
+			var checklogin = new XMLHttpRequest();
+			checklogin.open('GET', 'http://'+ip+':5000/auth/'+user+'/'+password, false);
+			checklogin.send(null);
+			result=parseInt(checklogin.responseText);
+			if(result==2){
+				alert("Il terminale non è autorizzato\nContattare l'amministratore");
+			}
+			else if(result==3){
+				alert("Controlla le credenziali");
+			}
+			else if(result==1){
+				document.getElementById("menubutton").className="visibile";
+				document.getElementById("benvenuto").className="visibile";
+				document.getElementById("benvenuto").innerHTML="<h3>Benvenuto!</h3><p>Caro "+user+", sei entrato correttamente nel sistema!";
+				document.getElementById("login").className="nascosto";
+			}
+		}
+		function logout(){
+			var user="";
+			var password = "";
+			document.getElementById("textinput4").value=user;
+			document.getElementById("textinput3").value=password;
+			document.getElementById("menubutton").className="nascosto";
+			document.getElementById("prestitolibri").className="nascosto";
+			document.getElementById("aggiuntalibri").className="nascosto";
+			document.getElementById("benvenuto").className="nascosto";
+			document.getElementById("benvenuto").innerHTML="";
+			document.getElementById("login").className="visibile";
+		}
+		function navigaRiservato(pagina){
+			if(pagina=='add'){
+				document.getElementById("menubutton").className="visibile";
+				document.getElementById("prestitolibri").className="nascosto";
+				document.getElementById("aggiuntalibri").className="visibile";
+				document.getElementById("benvenuto").className="nascosto";
+				document.getElementById("login").className="nascosto";
+			}
+			if(pagina=='presta'){
+				document.getElementById("menubutton").className="visibile";
+				document.getElementById("prestitolibri").className="visibile";
+				document.getElementById("aggiuntalibri").className="nascosto";
+				document.getElementById("benvenuto").className="nascosto";
+				document.getElementById("login").className="nascosto";
+			}
+		}
+		function presta(){
+			document.getElementById("prestaBox").innerHTML="";
+			var idtype=parseInt(document.getElementById("isbnotit").value);
+			if(idtype==1){
+				pISBN=document.getElementById("titoisbn").value;
+			}
+			else if(idtype==2){
+				var apiISBN = new XMLHttpRequest();
+				apiISBN.open('GET', 'http://'+ip+':5000/isbninfo/isbn/'+document.getElementById("titoisbn").value, false);
+				apiISBN.send(null);
+				pISBN=apiISBN.responseText;
+				if(pISBN=="0"){
+					alert("Controlla il titolo");
+				}
+			}
+			idB=document.getElementById("idtessera").value;
+			statoP=document.getElementById("prestaorientra").value;
+			var prestaApi = new XMLHttpRequest();
+			prestaApi.open('GET', 'http://'+ip+':5000/presta/'+user+'/'+password+'/'+pISBN+'/'+idB+'/'+statoP, false);
+			prestaApi.send(null);
+			document.getElementById("prestaBox").innerHTML=prestaApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+		}
+		function add(){
+			document.getElementById("addBox").innerHTML="";
+			var titolo=document.getElementById("addTitolo").value;
+			var autore=document.getElementById("autore").value;
+			var isbn=document.getElementById("isbn").value;
+			var posizione=document.getElementById("posizione").value;
+			var addApi = new XMLHttpRequest();
+			addApi.open('GET', 'http://'+ip+':5000/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
+			addApi.send(null);
+			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+		}
+	</script>
+	<style type="text/css">
+		.ui-icon-lock {
+			background-image: url("../static/css/images/lock-white.png");
+			/* Make your icon fit */
+			background-size: 14px 14px;
+			background-position: center; 
+		}
+		.visibile{
+			display: default;
+		}
+		.nascosto{
+			display: none;
+		}
+	</style>
+</head>
+<body onload="lista();">
+	<div data-role="page" data-control-title="Home" id="page1">
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<h3>
+				BiblioDB
+			</h3>
+		</div>
+		<div data-role="content">
+			<div style=" text-align:center" data-controltype="image">
+				<img alt="" style="width: 200px;" src="bibliodb.png">
+			</div>
+			<div data-controltype="textblock">
+				<p>
+					Benvenuto in BiblioDB
+					<br>
+				</p>
+				<p>
+					Quest'app consente di cercare i libri presenti nella biblioteca ed ottenerne una lista.
+					<br>
+				</p>
+				<p>
+					Purtroppo non è possibile prestare o aggiungere libri, perché questa app legge soltanto i dati ma non può scriverli
+					<br>
+				</p>
+				<p>
+					Inoltre quest'app potrà essere eseguita se connessi alla stessa rete in cui risiede il server dei contenuti
+					<br>
+				</p>
+			</div>
+		</div>
+		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+			<ul>
+				<li>
+					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+						Home
+					</a>
+				</li>
+				<li>
+					<a data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+						Ricerca
+					</a>
+				</li>
+				<li>
+					<a data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+						Lista Libri
+					</a>
+				</li>
+			<li>
+				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+					Area Riservata
+				</a>
+			</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" data-control-title="Ricerca" id="page2">
+		<div data-theme="a" data-role="header" data-position="fixed">
+				<h3>
+						Cerca Libro
+				</h3>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain" data-controltype="textinput" id="titolo">
+				<label for="textinput2">
+					Titolo
+				</label>
+				<input name="" id="textinput2" placeholder="" value="" type="text">
+			</div>
+			<a data-role="button" onclick="cerca()">
+				Cerca
+			</a>
+			<table style="border:none;">
+				<tr>
+					<td style="width:auto;">
+						<img alt="" id="cover" src="//static/nodata.jpg">
+					</td>
+					<td id="cercaBox">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+				<ul>
+						<li>
+								<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+										Home
+								</a>
+						</li>
+						<li>
+								<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+										Ricerca
+								</a>
+						</li>
+						<li>
+								<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+										Lista Libri
+								</a>
+						</li>
+					<li>
+						<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+							Area Riservata
+						</a>
+					</li>
+				</ul>
+		</div>
+	</div>
+	<div data-role="page" data-control-title="ListaLibri" id="page3">
+		<div data-theme="" data-role="header" data-position="fixed">
+			<h3>
+				Lista Libri
+			</h3>
+		</div>
+		<div data-role="content" style="height:100%;">
+				<div data-controltype="textblock" id="listaBox">
+				</div>
+			</div>
+		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+			<ul>
+				<li>
+					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+						Home
+					</a>
+				</li>
+				<li>
+					<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+						Ricerca
+					</a>
+				</li>
+				<li>
+					<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+						Lista Libri
+					</a>
+				</li>
+			<li>
+				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+					Area Riservata
+				</a>
+			</li>
+			</ul>
+		</div>
+	</div>
+	<div data-role="page" data-control-title="AreaRiservata" id="page4">
+		<div data-role="panel" id="panel1" data-position="left" data-display="reveal"
+		data-theme="a">
+			<ul data-role="listview" data-divider-theme="h" data-inset="false">
+				<li data-role="list-divider" role="heading">
+					BiblioDB
+				</li>
+				<li data-theme="a">
+					<a href="javascript:void(0);" onclick="navigaRiservato('add');" data-transition="slide">
+						Aggiungi titolo
+					</a>
+				</li>
+				<li data-theme="a">
+					<a href="javascript:void(0);" onclick="navigaRiservato('presta');" data-transition="slide">
+						Presta titolo
+					</a>
+				</li>
+				<li data-theme="a">
+					<a href="javascript:void(0);" onclick="logout();" data-transition="slide">
+						Esci
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<div class="nascosto" id="menubutton">
+				<a data-controltype="panelbutton" data-role="button" href="#panel1" data-icon="bars" data-iconpos="left" class="ui-btn-left">
+					Menù
+				</a>
+			</div>
+			<h3>
+				Area Riservata
+			</h3>
+		</div>
+		<div data-role="content">
+			<div class="visibile" id="login">
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="textinput4">
+						Nome Utente
+					</label>
+					<input name="" id="textinput4" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="textinput3">
+						Password
+					</label>
+					<input name="" id="textinput3" placeholder="" value="" type="password"> 
+				</div>
+				<a data-role="button" onclick="login()">
+					Accedi
+				</a>
+			</div>
+			<div class="nascosto" id="benvenuto">
+			</div>
+			<div class="nascosto" id="prestitolibri">
+				<h2>
+					Prestito libri
+				</h2>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="titoisbn">
+						Titolo o ISBN
+					</label>
+					<input name="" id="titoisbn" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="idtessera">
+						Codice tessera
+					</label>
+					<input name="" id="idtessera" placeholder="" value="" type="text">
+				</div>
+				<center><div data-role="fieldcontain" data-controltype="selectmenu">
+					<select id="isbnotit" name="">
+						<option value="1">
+							ISBN
+						</option>
+						<option value="2">
+							Titolo
+						</option>
+					</select>
+				</div>
+				<div data-role="fieldcontain" data-controltype="selectmenu">
+					<select id="prestaorientra" name="">
+						<option value="0">
+							Presta
+						</option>
+						<option value="1">
+							Rientra
+						</option>
+					</select>
+				</div></center>
+				<div id="prestaBox" data-controltype="textblock">
+				</div>
+				<a data-role="button" onclick="presta()">
+					Presta
+				</a>
+			</div>
+			<div class="nascosto" id="aggiuntalibri">
+				<h2>
+					Aggiungi libri
+				</h2>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="titolo">
+						Titolo
+					</label>
+					<input name="" id="addTitolo" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="autore">
+						Autore
+					</label>
+					<input name="" id="autore" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="isbn">
+						ISBN
+					</label>
+					<input name="" id="isbn" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="posizione">
+						Posizione
+					</label>
+					<input name="" id="posizione" placeholder="" value="" type="text">
+				</div>
+				<div id="addBox" data-controltype="textblock">
+				</div>
+				<a data-role="button" onclick="add()">
+					Aggiungi
+				</a>
+			</div>
+		</div>
+		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+			<ul>
+				<li>
+					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+						Home
+					</a>
+				</li>
+				<li>
+					<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+						Ricerca
+					</a>
+				</li>
+				<li>
+					<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+						Lista Libri
+					</a>
+				</li>
+			<li>
+				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+					Area Riservata
+				</a>
+			</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

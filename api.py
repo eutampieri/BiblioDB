@@ -221,6 +221,60 @@ def tsvExport():
             export=export+" \t \t \t \n"
     return export
 app = Flask(__name__)
+@app.route('/auth/<user>/<password>')
+def checkUser(user,password):
+	if ipEnabled==True:
+		try:
+			ipR= ip[request.environ['REMOTE_ADDR']]
+		except KeyError:
+			authStatus="2"
+		else:
+			if auth(user,password)=="admin":
+				authStatus="1"
+			else:
+				authStatus="3"
+
+	else:
+		if auth(user,password)=="admin":
+			authStatus="1"
+		else:
+			authStatus="3"
+	return Response(response=authStatus, status=200,mimetype="text/plain")
+@app.route('/gbooks/<isbnapi>/<inforeq>')
+def gBooksParser(isbnapi, inforeq):
+	url="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbnapi+"&projection=lite"
+	try:
+		jsonurl=urllib2.urlopen(url)
+		gbooksjson=json.loads(jsonurl.read())
+	except:
+		neterror=open('internet.jpg')
+		gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
+	else:
+		try:
+			a=gbooksjson["items"]
+			book=a[0]
+			info=book["volumeInfo"]
+			if str(inforeq)=="titolo":
+				inforesp=info["title"]
+				gapi=Response(response=inforesp, status=200,mimetype="text/plain")
+			elif str(inforeq)=="autore":
+				inforesp=info["authors"]
+				gapi=Response(response=inforesp, status=200,mimetype="text/plain")
+			elif str(inforeq)=="copertina":
+				try:
+					images=info["imageLinks"]
+					cover=images["thumbnail"]
+				except:
+					neterror=open('nodata.jpg')
+					gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
+				else:
+					coverUrl=urllib2.urlopen(cover)
+					inforesp=coverUrl.read()
+					gapi= Response(response=inforesp, status=200,mimetype="image/jpeg")
+		except:
+			neterror=open('nodata.jpg')
+			gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
+	return gapi
 @app.route('/isbninfo/titolo/<isbn>')
 def isbnTitolo(isbn):
 	resp=Response(response=ISBNTotit(str(isbn).upper()).title(), status=200,mimetype="text/plain")
@@ -230,15 +284,19 @@ def scheda(titolo):
 	resp=""
 	try:
 		isbn=titToISBN(titolo.lower())
+		if ISBNown[isbn.upper()]=="Biblioteca":
+			statoLibro="Non prestato"
+		else:
+			statoLibro="Prestato"
 	except KeyError:
 		resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
 	else:
-		resp=Response(response="Titolo: "+ISBNTotit(str(isbn).upper()).title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper(), status=200,mimetype="text/plain")
+		resp=Response(response="Titolo: "+ISBNTotit(str(isbn).upper()).title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+"\nStato: "+statoLibro, status=200,mimetype="text/plain")
 	finally:
 		return resp
 @app.route('/isbninfo/isbn/<titolo>')
 def TitoloIsbn(titolo):
-	resp=Response(response=IStitToISBN(str(titolo).lower()).title(), status=200,mimetype="text/plain")
+	resp=Response(response=titToISBN(str(titolo).lower()).title(), status=200,mimetype="text/plain")
 	return resp
 @app.route('/isbninfo/posizione/<isbn>')
 def isbnPosizione(isbn):
@@ -281,6 +339,10 @@ def QrCode():
 	#print url
 	except:
 		return "<h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
+@app.route('/zipclient')
+def zipClient():
+	zipFile=open('BiblioDBnet.zip')
+	return zipFile.read()
 @app.route('/add/<user>/<password>/<titolo>/<isbn>/<autore>/<posizione>')
 def addBook(user,password,titolo,isbn,autore,posizione):
 	err401="<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
