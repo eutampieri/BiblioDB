@@ -34,17 +34,17 @@
 	<script src="js/sha512.js"></script>
 	<script type="text/javascript">
 		var ip=window.location.hostname;
-			function cerca(){
-				var schedareq = new XMLHttpRequest();
-				schedareq.open('GET', 'http://'+ip+':5000/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
-				schedareq.send(null);
-				scheda=schedareq.responseText;
-				document.getElementById("cercaBox").innerHTML=scheda.replace(new RegExp('\r?\n','g'), '<br />');
-				var req = new XMLHttpRequest();
-				req.open('GET', 'http://'+ip+':5000/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
-				req.send(null);
-				isbn=req.responseText;
-				document.getElementById("cover").src="http://"+ip+":5000/gbooks/"+isbn+"/copertina";
+		function cerca(){
+			var schedareq = new XMLHttpRequest();
+			schedareq.open('GET', 'http://'+ip+':5000/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
+			schedareq.send(null);
+			scheda=schedareq.responseText;
+			document.getElementById("cercaBox").innerHTML=scheda.replace(new RegExp('\r?\n','g'), '<br />');
+			var req = new XMLHttpRequest();
+			req.open('GET', 'http://'+ip+':5000/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
+			req.send(null);
+			isbn=req.responseText;
+			document.getElementById("cover").src="http://"+ip+":5000/gbooks/"+isbn+"/copertina";
 		}
 		function lista(){
 				var listareq = new XMLHttpRequest();
@@ -52,6 +52,14 @@
 				listareq.send(null);
 				var lista=listareq.responseText;
 				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
+				if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+":5000/static/cookie.html?=EAN";
+					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+":5000/static/cookie.html?=EAN";
+				}
+				else{
+					 document.getElementById("scan").className="nascosto"
+					 document.getElementById("Pscan").className="nascosto"
+				}
 		}
 		function naviga(pagina){
 			window.location.replace('http://'+ip+':5000/static/index.html#page'+pagina);
@@ -141,6 +149,33 @@
 			addApi.open('GET', 'http://'+ip+':5000/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
 			addApi.send(null);
 			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+		}
+		function readISBN(){
+			if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+				var isbn=document.cookie.replace("isbn=","");
+			}
+			else{
+				var isbn=prompt("Inserisci l'ISBN", "ISBN");
+			}
+			var titoloApi = new XMLHttpRequest();
+			titoloApi.open('GET', 'http://'+ip+':5000/gbooks/'+isbn+'/titolo', false);
+			titoloApi.send(null);
+			var autoreApi = new XMLHttpRequest();
+			autoreApi.open('GET', 'http://'+ip+':5000/gbooks/'+isbn+'/autore', false);
+			autoreApi.send(null);
+			document.getElementById("autore").value=autoreApi.responseText;
+			document.getElementById("addTitolo").value=titoloApi.responseText;
+			document.getElementById("isbn").value=isbn;
+		}
+		function PreadISBN(){
+			if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+				var Pisbn=document.cookie.replace("isbn=","");
+			}
+			else{
+				var éisbn=prompt("Inserisci l'ISBN", "ISBN");
+			}
+			document.getElementById("titoisbn").value=Pisbn;
+			document.getElementById("isbnotit").value=1;
 		}
 	</script>
 	<style type="text/css">
@@ -391,6 +426,12 @@
 				</div></center>
 				<div id="prestaBox" data-controltype="textblock">
 				</div>
+				<a data-role="button" id="Pscan">
+					Scansiona codice
+				</a>
+				<a data-role="button" onclick="PreadISBN()">
+					Leggi
+				</a>
 				<a data-role="button" onclick="presta()">
 					Presta
 				</a>
@@ -400,7 +441,7 @@
 					Aggiungi libri
 				</h2>
 				<div data-role="fieldcontain" data-controltype="textinput">
-					<label for="titolo">
+					<label for="addTitolo">
 						Titolo
 					</label>
 					<input name="" id="addTitolo" placeholder="" value="" type="text">
@@ -425,6 +466,12 @@
 				</div>
 				<div id="addBox" data-controltype="textblock">
 				</div>
+				<a data-role="button" id="scan">
+					Scansiona codice
+				</a>
+				<a data-role="button" onclick="readISBN()">
+					Leggi
+				</a>
 				<a data-role="button" onclick="add()">
 					Aggiungi
 				</a>
