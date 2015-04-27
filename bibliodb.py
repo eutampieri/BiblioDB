@@ -11,6 +11,7 @@ from ttk import *
 from updater import update, Cupdate
 from Crypto.Hash import SHA512
 import getpass
+import BiblioDB_Core
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -50,53 +51,13 @@ finally:
         o.close
 
 
-def add():
+def CLIadd():
     titolo = raw_input("Titolo: ").lower()
     autore = raw_input("Autore: ").lower()
     isbn = raw_input("ISBN o ID volume: ")
     pos = raw_input("La posizione: ")
-    isbnPos[isbn] = pos
-    titleIsbn[titolo] = isbn
-    isbnTitle[isbn] = titolo
-    isbnAuthor[isbn] = autore
-    ISBNown[isbn] = "Biblioteca"
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
+    add(titolo,isbn,autore,pos)
     pass
-
-
-def GUIadd(titolo, autore, isbn, pos):
-    isbnPos[isbn] = pos
-    titleIsbn[titolo] = isbn
-    isbnTitle[isbn] = titolo
-    isbnAuthor[isbn] = autore
-    ISBNown[isbn] = "Biblioteca"
-    o = open('bibliodb.json', 'w')
-    json.dump(
-        (ISBNuse,
-         isbnPos,
-         titleIsbn,
-         isbnTitle,
-         isbnAuthor,
-         nomeFile,
-         ISBNown,
-         borrowTime,
-         ISBNborrowDate),
-        o)
-    o.close()
-    pass
-
 
 def find(mode, string):
     isbnCode = ""
@@ -206,7 +167,7 @@ def main():
             autore = raw_input("Autore: ").lower()
             isbn = raw_input("ISBN o ID volume: ")
             pos = raw_input("La posizione: ")
-            print add(usercli, passwordcli, titolo, autore, isbn, pos)
+            print CLIadd(usercli, passwordcli, titolo, autore, isbn, pos)
         elif todoM.lower() == 'c':
             searchToDo = raw_input(
                 "Inserire 1 per utilizzare l'ISBN, 2 per il titolo.\n")
@@ -303,10 +264,10 @@ def GUI():
     aggiungi = Frame(n)  # second page
     Frlista = Frame(n)  # second page
     Trova = Frame(n)
-    n.add(prestito, text='Presta Libri')
-    n.add(aggiungi, text='Aggiungi Libro')
-    n.add(Frlista, text='Lista Libri')
-    n.add(Trova, text="Ricerca Libro")
+    n.CLIadd(prestito, text='Presta Libri')
+    n.CLIadd(aggiungi, text='Aggiungi Libro')
+    n.CLIadd(Frlista, text='Lista Libri')
+    n.CLIadd(Trova, text="Ricerca Libro")
     n.pack()
     ###########################################
     # Scheda Prestito
@@ -371,10 +332,10 @@ def GUI():
     posiz.insert(0, "Posizione")
     Button(
         aggiungi,
-        command=lambda: GUIadd(
+        command=lambda: add(
             titolo.get(),
-            autore.get(),
             isbn.get(),
+            autore.get(),
             posiz.get()),
         text="Aggiungi").pack()
     ###########################################
