@@ -200,13 +200,11 @@ def main():
         elif todoM.lower() == 'q':
             break
         elif todoM.lower() == 'a':
-            usercli = raw_input("Utente: ")
-            passwordcli = getpass.getpass("Password: ")
             titolo = raw_input("Titolo: ").lower()
             autore = raw_input("Autore: ").lower()
             isbn = raw_input("ISBN o ID volume: ")
             pos = raw_input("La posizione: ")
-            print add(usercli, passwordcli, titolo, autore, isbn, pos)
+            print GUIadd(titolo, autore, isbn, pos)
         elif todoM.lower() == 'c':
             searchToDo = raw_input(
                 "Inserire 1 per utilizzare l'ISBN, 2 per il titolo.\n")
