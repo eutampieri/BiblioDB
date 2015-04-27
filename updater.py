@@ -3,7 +3,7 @@ import platform
 from os import system
 def update():
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
-	actualVersion=102
+	actualVersion=104
 	try:
 		version = urllib2.urlopen(url)
 		gitVersion=int(version.read())
