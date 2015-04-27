@@ -11,7 +11,7 @@ from ttk import *
 from updater import update, Cupdate
 from Crypto.Hash import SHA512
 import getpass
-import BiblioDB_Core
+from BiblioDB_Core import *
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
