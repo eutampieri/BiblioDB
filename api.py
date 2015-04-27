@@ -10,6 +10,7 @@ import base64
 import os
 from datetime import date, datetime, time, timedelta
 from updater import Cupdate
+import traceback
 Cupdate()
 # the block size for the cipher object; must be 16, 24, or 32 for AES
 BLOCK_SIZE = 32
@@ -43,7 +44,7 @@ def decode(encoded):
 	decoded = DecodeAES(cipher, encoded)
 	return decoded 
 ip={"127.0.0.1":"Server"}
-ipEnabled=True
+ipEnabled=False
 ISBNuse = {}
 # Dizionario che contiene le informazioni sullo stato dell'ISBN
 isbnPos = {}
@@ -148,8 +149,12 @@ def find(mode,string):
 def titToISBN(tit):
 	try:
 		Isbn = titleIsbn[tit]
-	except KeyError:
-	   Isbn=0
+	except:
+		try:
+			utit=tit.title()
+			Isbn = titleIsbn[utit]
+		except:
+			Isbn=traceback.format_exc()
 	return Isbn
 	pass
 def ISBNTotit(tISBN):
@@ -281,22 +286,22 @@ def isbnTitolo(isbn):
 	return resp
 @app.route('/isbninfo/scheda/<titolo>')
 def scheda(titolo):
-	resp=""
+	resp="Ciao"
 	try:
-		isbn=titToISBN(titolo.lower())
+		isbn=str(titToISBN(titolo.lower()))
 		if ISBNown[isbn.upper()]=="Biblioteca":
 			statoLibro="Non prestato"
 		else:
 			statoLibro="Prestato"
-	except KeyError:
-		resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
-	else:
-		resp=Response(response="Titolo: "+ISBNTotit(str(isbn).upper()).title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+"\nStato: "+statoLibro, status=200,mimetype="text/plain")
+		resp=Response(response="\nTitolo: "+titolo.title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+"\nStato: "+statoLibro, status=200,mimetype="text/plain")
+	except:
+#		resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+		resp=Response(response=titolo+'\n'+isbn+'\n'+traceback.format_exc(),status=200,mimetype="text/plain")
 	finally:
 		return resp
 @app.route('/isbninfo/isbn/<titolo>')
 def TitoloIsbn(titolo):
-	resp=Response(response=titToISBN(str(titolo).lower()).title(), status=200,mimetype="text/plain")
+	resp=Response(response=titToISBN(str(urllib2.unquote(titolo)).lower()).title(), status=200,mimetype="text/plain")
 	return resp
 @app.route('/isbninfo/posizione/<isbn>')
 def isbnPosizione(isbn):
@@ -345,6 +350,7 @@ def zipClient():
 	return zipFile.read()
 @app.route('/add/<user>/<password>/<titolo>/<isbn>/<autore>/<posizione>')
 def addBook(user,password,titolo,isbn,autore,posizione):
+	titolo=titolo.lower()
 	err401="<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
 	if ipEnabled==True:
 		try:
