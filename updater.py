@@ -20,7 +20,7 @@ def update():
 			return "Aggiornato!"
 def Cupdate():
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
-	actualVersion=102
+	actualVersion=105
 	try:
 		version = urllib2.urlopen(url)
 		gitVersion=int(version.read())

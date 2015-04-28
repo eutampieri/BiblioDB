@@ -46,6 +46,24 @@
 			isbn=req.responseText;
 			document.getElementById("cover").src="http://"+ip+":5000/gbooks/"+isbn+"/copertina";
 		}
+		function getMobileOS() {
+		  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+		  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) )
+		  {
+		    return 'iOS';
+
+		  }
+		  else if( userAgent.match( /Android/i ) )
+		  {
+
+		    return 'Android';
+		  }
+		  else
+		  {
+		    return 'unknown';
+		  }
+		}
 		function lista(){
 				var listareq = new XMLHttpRequest();
 				listareq.open('GET', 'http://'+ip+':5000/lista', false);
@@ -151,7 +169,7 @@
 			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		function readISBN(){
-			if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+			if(getMobileOS()!='unknown'){
 				var isbn=document.cookie.replace("isbn=","");
 			}
 			else{
@@ -168,11 +186,11 @@
 			document.getElementById("isbn").value=isbn;
 		}
 		function PreadISBN(){
-			if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+			if(getMobileOS()!='unknown'){
 				var Pisbn=document.cookie.replace("isbn=","");
 			}
 			else{
-				var éisbn=prompt("Inserisci l'ISBN", "ISBN");
+				var Pisbn=prompt("Inserisci l'ISBN", "ISBN");
 			}
 			document.getElementById("titoisbn").value=Pisbn;
 			document.getElementById("isbnotit").value=1;
