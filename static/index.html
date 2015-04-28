@@ -70,7 +70,7 @@
 				listareq.send(null);
 				var lista=listareq.responseText;
 				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
-				if(navigator.userAgent.toLowerCase()=="android"||navigator.userAgent.toLowerCase()=="iphone"||navigator.userAgent.toLowerCase()=="ipad"||navigator.userAgent.toLowerCase()=="ipod"){
+				if(getMobileOS()!='unknown'){
 					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+":5000/static/cookie.html?=EAN";
 					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+":5000/static/cookie.html?=EAN";
 				}
