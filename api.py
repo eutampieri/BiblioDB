@@ -60,7 +60,7 @@ ISBNborrowDate = {}
 nomeFile = "db_libri"
 borrowTime = 30
 utenti={"admin":"password"}
-badge={"admin":"01"}
+badge={"01":"admin"}
 tipoUtenti={"admin":"admin"}
 statoUtenti={}
 badgeUtenti={}
@@ -281,6 +281,30 @@ def AggiungiUtente(user, password, codTessera,badge):
 		return addUser(codTessera,badge)
 	else:
 		return"Non Autorizzato!"
+@app.route('/rfid/auth/<rfid>')
+def checkBadge(rfid):
+	if ipEnabled==True:
+		try:
+			ipR= ip[request.environ['REMOTE_ADDR']]
+		except KeyError:
+			authStatus="2"
+		else:
+			try:
+				if tipoUtenti[badge[urllib2.unquote(rfid).lower()]]=="admin":
+					authStatus="1"
+				else:
+					authStatus="3"
+			except:
+				authStatus="Errore"
+	else:
+		try:
+			if tipoUtenti[badge[urllib2.unquote(rfid).lower()]]=="admin":
+				authStatus="1"
+			else:
+				authStatus="3"
+		except:
+			authStatus="Errore"
+	return Response(response=authStatus, status=200,mimetype="text/plain")
 @app.route('/auth/<user>/<password>')
 def checkUser(user,password):
 	if ipEnabled==True:
@@ -336,17 +360,18 @@ def gBooksParser(isbnapi, inforeq):
 			gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
 	return gapi
 @app.route('/rfid/add/<rfid>/<isbn>')
-def isbnTitolo(rfid,isbn):
+def rfidAdd(rfid,isbn):
 	rfidISBN[urllib2.unquote(rfid).lower]=urllib2.unquote(isbn).lower
 	resp=Response(response="Registrato "+isbn, status=200,mimetype="text/plain")
 	return resp
 @app.route('/rfid/isbn/<rfid>')
-def isbnTitolo(rfid):
+def rfidISBN(rfid):
 	try:
 		resp=Response(response=rfidISBN[urllib2.unquote(rfid).lower], status=200,mimetype="text/plain")
 	except:
 		resp=Response(response="Errore", status=200,mimetype="text/plain")
 	return resp
+@app.route('/rfid/auth/')
 @app.route('/isbninfo/titolo/<isbn>')
 def isbnTitolo(isbn):
 	resp=Response(response=ISBNTotit(urllib2.unquote(str(isbn)).upper()).title(), status=200,mimetype="text/plain")
