@@ -169,36 +169,39 @@ def prestaISBN(pISBN, state, owner):
 	strPrestito=""
 	#try:
 	oldOwner=ISBNown[pISBN.upper()]
-	ISBNuse[pISBN.upper()] = state
-	ISBNown[pISBN.upper()] = owner
-	data_prestito = datetime.today().strftime('%d/%m/%Y')
-	data_fine = datetime.today() + timedelta(days=borrowTime)
-	res = data_fine.strftime('%d/%m/%Y')
-	ISBNborrowDate[pISBN] = data_prestito
-	strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
-	if state == 0:
-		strPrestito=strPrestito+"Prestato a: " + owner+'\n'
-		strPrestito=strPrestito+"RENDERE ENTRO:\n"
-		strPrestito=strPrestito+ res+'\n'
-	elif state == 1:
-		strPrestito=strPrestito+"Reso da: " + oldOwner+'\n'
-		ISBNown[pISBN] = "Biblioteca"
-		strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
-	o = open('bibliodb.json', 'w')
-	json.dump(
-		(ISBNuse,
-		 isbnPos,
-		 titleIsbn,
-		 isbnTitle,
-		 isbnAuthor,
-		 nomeFile,
-		 ISBNown,
-		 borrowTime,
-		 ISBNborrowDate),
-		o)
-	o.close()
-	#except KeyError:
-	#   print"ERRORE"
+	if oldOwner=="Biblioteca":
+		ISBNuse[pISBN.upper()] = state
+		ISBNown[pISBN.upper()] = owner
+		data_prestito = datetime.today().strftime('%d/%m/%Y')
+		data_fine = datetime.today() + timedelta(days=borrowTime)
+		res = data_fine.strftime('%d/%m/%Y')
+		ISBNborrowDate[pISBN] = data_prestito
+		strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
+		if state == 0:
+			strPrestito=strPrestito+"Prestato a: " + owner+'\n'
+			strPrestito=strPrestito+"RENDERE ENTRO:\n"
+			strPrestito=strPrestito+ res+'\n'
+		elif state == 1:
+			strPrestito=strPrestito+"Reso da: " + oldOwner+'\n'
+			ISBNown[pISBN] = "Biblioteca"
+			strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
+		o = open('bibliodb.json', 'w')
+		json.dump(
+			(ISBNuse,
+			 isbnPos,
+			 titleIsbn,
+			 isbnTitle,
+			 isbnAuthor,
+			 nomeFile,
+			 ISBNown,
+			 borrowTime,
+			 ISBNborrowDate),
+			o)
+		o.close()
+		#except KeyError:
+		#   print"ERRORE"
+	else:
+		strPrestito="Il titolo è stato prestato in data "+ISBNborrowDate[pISBN]
 	return strPrestito
 def auth(user,password):
 	h = SHA512.new()
