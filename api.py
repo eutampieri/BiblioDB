@@ -359,10 +359,13 @@ def gBooksParser(isbnapi, inforeq):
 			neterror=open('nodata.jpg')
 			gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
 	return gapi
-@app.route('/rfid/add/<rfid>/<isbn>')
-def rfidAdd(rfid,isbn):
-	rfidISBN[urllib2.unquote(rfid).lower]=urllib2.unquote(isbn).lower
-	resp=Response(response="Registrato "+isbn, status=200,mimetype="text/plain")
+@app.route('/rfid/add/<user>/<password>/<rfid>/<isbn>')
+def rfidAdd(user,password,rfid,isbn):
+	if auth(user,password)=='admin':
+		rfidISBN[urllib2.unquote(rfid).lower]=urllib2.unquote(isbn).lower
+		resp=Response(response="Registrato "+isbn, status=200,mimetype="text/plain")
+	else:
+		resp="Non Autorizzato!"
 	return resp
 @app.route('/rfid/isbn/<rfid>')
 def rfidISBN(rfid):
