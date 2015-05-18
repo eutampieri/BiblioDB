@@ -140,28 +140,37 @@ finally:
 		o.close
 def add(titolo,isbn,autore,pos):
 	try:
-		isbnPos[isbn] = pos.upper()
-		titleIsbn[titolo] = isbn.upper()
-		isbnTitle[isbn] = titolo.lower()
-		isbnAuthor[isbn] = autore.lower()
-		ISBNown[isbn]="Biblioteca"
-		o = open('bibliodb.json', 'w')
-		json.dump(
-			(ISBNuse,
-			 isbnPos,
-			 titleIsbn,
-			 isbnTitle,
-			 isbnAuthor,
-			 nomeFile,
-			 ISBNown,
-			 borrowTime,
-			 ISBNborrowDate),
-			o)
-		o.close()
+		try:
+			esiste=titolo[isbn]
+		except:
+			esistevaGia=True
+		else:
+			titleIsbn[titolo] = isbn.upper()
+		finally:
+			isbnPos[isbn] = pos.upper()
+			isbnTitle[isbn] = titolo.lower()
+			isbnAuthor[isbn] = autore.lower()
+			ISBNown[isbn]="Biblioteca"
+			o = open('bibliodb.json', 'w')
+			json.dump(
+				(ISBNuse,
+				 isbnPos,
+				 titleIsbn,
+				 isbnTitle,
+				 isbnAuthor,
+				 nomeFile,
+				 ISBNown,
+				 borrowTime,
+				 ISBNborrowDate),
+				o)
+			o.close()
 	except:
 		return"ERRORE"
 	else:
-		return "Aggiunto "+titolo.title()
+		if esistevaGia==True:
+			return "Aggiunto "+titolo.title()+"\nAttenzione: Il titolo del libro era già presente nel DataBase, perciò non è possibile trovare questo libro nella ricerca per titolo"
+		else:
+			return "Aggiunto "+titolo.title()
 	pass
 def addUser(cod,badge):
 	try:
