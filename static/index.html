@@ -125,12 +125,22 @@
 				document.getElementById("prestitolibri").className="nascosto";
 				document.getElementById("aggiuntalibri").className="visibile";
 				document.getElementById("benvenuto").className="nascosto";
+				document.getElementById("useradd").className="nascosto";
 				document.getElementById("login").className="nascosto";
 			}
 			if(pagina=='presta'){
 				document.getElementById("menubutton").className="visibile";
 				document.getElementById("prestitolibri").className="visibile";
+				document.getElementById("useradd").className="nascosto";
 				document.getElementById("aggiuntalibri").className="nascosto";
+				document.getElementById("benvenuto").className="nascosto";
+				document.getElementById("login").className="nascosto";
+			}
+			if(pagina=='useradd'){
+				document.getElementById("menubutton").className="visibile";
+				document.getElementById("prestitolibri").className="visibile";
+				document.getElementById("aggiuntalibri").className="nascosto";
+				document.getElementById("useradd").className="visibile";
 				document.getElementById("benvenuto").className="nascosto";
 				document.getElementById("login").className="nascosto";
 			}
@@ -167,6 +177,19 @@
 			addApi.open('GET', 'http://'+ip+':5000/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
 			addApi.send(null);
 			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+		}
+		//@app.route('/users/add/<user>/<password>/<codTessera>/<badge>')
+		//def AggiungiUtente(user, password, codTessera,badge):
+		function userAdd(){
+			document.getElementById("addUserBox").innerHTML="";
+			var codTessera=document.getElementById("codTessera").value;
+			var badge=document.getElementById("badge").value;
+			var isbn=document.getElementById("isbn").value;
+			var posizione=document.getElementById("posizione").value;
+			var addApi = new XMLHttpRequest();
+			addApi.open('GET', 'http://'+ip+':5000/users/add/'+codTessera+'/'+badge, false);
+			addApi.send(null);
+			document.getElementById("addUBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		function readISBN(){
 			if(getMobileOS()!='unknown'){
@@ -377,6 +400,11 @@
 					</a>
 				</li>
 				<li data-theme="a">
+					<a href="javascript:void(0);" onclick="navigaRiservato('useradd');" data-transition="slide">
+						Aggiungi Utente
+					</a>
+				</li>
+				<li data-theme="a">
 					<a href="javascript:void(0);" onclick="logout();" data-transition="slide">
 						Esci
 					</a>
@@ -499,6 +527,28 @@
 				</a>
 				<a data-role="button" onclick="add()">
 					Aggiungi
+				</a>
+			</div>
+			<div class="nascosto" id="useradd">
+				<h2>
+					Aggiungi utenti
+				</h2>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="codTessera">
+						Codice Tessera
+					</label>
+					<input name="" id="codTessera" placeholder="" value="" type="text">
+				</div>
+				<div data-role="fieldcontain" data-controltype="textinput">
+					<label for="badge">
+						ID RFID
+					</label>
+					<input name="" id="badge" placeholder="" value="" type="text">
+				</div>
+				<div id="addUBox" data-controltype="textblock">
+				</div>
+				<a data-role="button" onclick="userAdd()">
+					Aggiungi utente
 				</a>
 			</div>
 		</div>
