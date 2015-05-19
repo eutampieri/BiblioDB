@@ -3,7 +3,9 @@ import platform
 from os import system
 def update():
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
-	actualVersion=124
+	versionfile=open(version,r)
+	actualVersion=int(versionfile.read())
+	versionfile.close()
 	try:
 		version = urllib2.urlopen(url)
 		gitVersion=int(version.read())
@@ -20,7 +22,9 @@ def update():
 			return "Aggiornato!"
 def Cupdate():
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
-	actualVersion=124
+	versionfile=open(version,r)
+	actualVersion=int(versionfile.read())
+	versionfile.close()
 	try:
 		version = urllib2.urlopen(url)
 		gitVersion=int(version.read())
