@@ -35,22 +35,22 @@
 	<script type="text/javascript">
 		var ip=window.location.hostname;
 		if(location.port==null||location.port==0):{
-			port=80;
+			var porta=80;
 		}
 		else{
-			port=location.port;
+			var porta=location.port;
 		}
 		function cerca(){
 			var schedareq = new XMLHttpRequest();
-			schedareq.open('GET', 'http://'+ip+':'+port+'/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
+			schedareq.open('GET', 'http://'+ip+':'+porta+'/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
 			schedareq.send(null);
 			scheda=schedareq.responseText;
 			document.getElementById("cercaBox").innerHTML=scheda.replace(new RegExp('\r?\n','g'), '<br />');
 			var req = new XMLHttpRequest();
-			req.open('GET', 'http://'+ip+':'+port+'/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
+			req.open('GET', 'http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
 			req.send(null);
 			isbn=req.responseText;
-			document.getElementById("cover").src="http://"+ip+":'+port+'/gbooks/"+isbn+"/copertina";
+			document.getElementById("cover").src="http://"+ip+":'+porta+'/gbooks/"+isbn+"/copertina";
 		}
 		function getMobileOS() {
 		  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -72,13 +72,13 @@
 		}
 		function lista(){
 				var listareq = new XMLHttpRequest();
-				listareq.open('GET', 'http://'+ip+':'+port+'/lista', false);
+				listareq.open('GET', 'http://'+ip+':'+porta+'/lista', false);
 				listareq.send(null);
 				var lista=listareq.responseText;
 				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
 				if(getMobileOS()!='unknown'){
-					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+":'+port+'/static/cookie.html?=EAN";
-					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+":'+port+'/static/cookie.html?=EAN";
+					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+":'+porta+'/static/cookie.html?=EAN";
+					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+":'+porta+'/static/cookie.html?=EAN";
 				}
 				else{
 					 document.getElementById("scan").className="nascosto"
@@ -86,7 +86,7 @@
 				}
 		}
 		function naviga(pagina){
-			window.location.replace('http://'+ip+':'+port+'/static/index.html#page'+pagina);
+			window.location.replace('http://'+ip+':'+porta+'/static/index.html#page'+pagina);
 		}
 		function parametro(){
 			//alert(window.location.search.replace("?", ""));
@@ -97,7 +97,7 @@
 			user=document.getElementById("textinput4").value;
 			password = CryptoJS.SHA512(document.getElementById("textinput3").value);
 			var checklogin = new XMLHttpRequest();
-			checklogin.open('GET', 'http://'+ip+':'+port+'/auth/'+user+'/'+password, false);
+			checklogin.open('GET', 'http://'+ip+':'+porta+'/auth/'+user+'/'+password, false);
 			checklogin.send(null);
 			result=parseInt(checklogin.responseText);
 			if(result==2){
@@ -159,7 +159,7 @@
 			}
 			else if(idtype==2){
 				var apiISBN = new XMLHttpRequest();
-				apiISBN.open('GET', 'http://'+ip+':'+port+'/isbninfo/isbn/'+document.getElementById("titoisbn").value, false);
+				apiISBN.open('GET', 'http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById("titoisbn").value, false);
 				apiISBN.send(null);
 				pISBN=apiISBN.responseText;
 				if(pISBN=="0"){
@@ -169,7 +169,7 @@
 			idB=document.getElementById("idtessera").value;
 			statoP=document.getElementById("prestaorientra").value;
 			var prestaApi = new XMLHttpRequest();
-			prestaApi.open('GET', 'http://'+ip+':'+port+'/presta/'+user+'/'+password+'/'+pISBN+'/'+idB+'/'+statoP, false);
+			prestaApi.open('GET', 'http://'+ip+':'+porta+'/presta/'+user+'/'+password+'/'+pISBN+'/'+idB+'/'+statoP, false);
 			prestaApi.send(null);
 			document.getElementById("prestaBox").innerHTML=prestaApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
 		}
@@ -180,7 +180,7 @@
 			var isbn=document.getElementById("isbn").value;
 			var posizione=document.getElementById("posizione").value;
 			var addApi = new XMLHttpRequest();
-			addApi.open('GET', 'http://'+ip+':'+port+'/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
+			addApi.open('GET', 'http://'+ip+':'+porta+'/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
 			addApi.send(null);
 			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
 		}
@@ -193,7 +193,7 @@
 			var isbn=document.getElementById("isbn").value;
 			var posizione=document.getElementById("posizione").value;
 			var addApi = new XMLHttpRequest();
-			addApi.open('GET', 'http://'+ip+':'+port+'/users/add/'+codTessera+'/'+badge, false);
+			addApi.open('GET', 'http://'+ip+':'+porta+'/users/add/'+codTessera+'/'+badge, false);
 			addApi.send(null);
 			document.getElementById("addUBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
 		}
@@ -205,10 +205,10 @@
 				var isbn=prompt("Inserisci l'ISBN", "ISBN");
 			}
 			var titoloApi = new XMLHttpRequest();
-			titoloApi.open('GET', 'http://'+ip+':'+port+'/gbooks/'+isbn+'/titolo', false);
+			titoloApi.open('GET', 'http://'+ip+':'+porta+'/gbooks/'+isbn+'/titolo', false);
 			titoloApi.send(null);
 			var autoreApi = new XMLHttpRequest();
-			autoreApi.open('GET', 'http://'+ip+':'+port+'/gbooks/'+isbn+'/autore', false);
+			autoreApi.open('GET', 'http://'+ip+':'+porta+'/gbooks/'+isbn+'/autore', false);
 			autoreApi.send(null);
 			document.getElementById("autore").value=autoreApi.responseText;
 			document.getElementById("addTitolo").value=titoloApi.responseText;
