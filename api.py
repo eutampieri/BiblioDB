@@ -11,6 +11,20 @@ import os
 from datetime import date, datetime, time, timedelta
 from updater import Cupdate
 import traceback
+import gettext
+import locale
+import logging
+def init_localization():
+  '''prepare l10n'''
+  locale.setlocale(locale.LC_ALL, '') # use user's preferred locale
+  # take first two characters of country code
+  loc = locale.getlocale()
+  filename = "res/messages_%s.mo" % locale.getlocale()[0][0:2]
+  try:
+    trans = gettext.GNUTranslations(open( filename, "rb" ) )
+  except IOError:
+    trans = gettext.NullTranslations()
+  trans.install()
 Cupdate()
 # the block size for the cipher object; must be 16, 24, or 32 for AES
 BLOCK_SIZE = 32
@@ -165,10 +179,10 @@ def add(titolo,isbn,autore,pos):
 				o)
 			o.close()
 	except:
-		return"ERRORE"
+		return _("Errore")
 	else:
 		if esistevaGia==True:
-			return "Aggiunto "+titolo.title()+"\nAttenzione: Il titolo del libro era già presente nel DataBase, perciò non è possibile trovare questo libro nella ricerca per titolo"
+			return _("Aggiunto ")+titolo.title()+_("\nAttenzione: Il titolo del libro era già presente nel DataBase, perciò non è possibile trovare questo libro nella ricerca per titolo")
 		else:
 			return "Aggiunto "+titolo.title()
 	pass
@@ -183,9 +197,9 @@ def addUser(cod,badge):
 			o)
 		o.close()
 	except:
-		return"ERRORE"
+		return _("Errore")
 	else:
-		return "OK"
+		return _("OK")
 	pass
 def find(mode,string):
 	if mode==1:
@@ -194,7 +208,7 @@ def find(mode,string):
 		isbnCode=titToISBN(string.lower())
 	pos=isbnPos[isbnCode].upper()
 	titoloOpera=ISBNTotit(isbnCode).title()
-	toReturn="----------------------------------\nTitolo:\t"+titoloOpera+"\nISBN:\t"+isbnCode+"\nAutore:\t"+ISBNToAut(isbnCode).title()+"\nPosizione:\t"+pos+"\n----------------------------------\n"
+	toReturn="----------------------------------\n"+_("Titolo:")+"\t"+titoloOpera+"\nISBN:\t"+isbnCode+"\n"+_("Autore:")+"\t"+ISBNToAut(isbnCode).title()+"\n"+_("Posizione:")+"\t"+pos+"\n----------------------------------\n"
 	return toReturn
 def titToISBN(tit):
 	try:
@@ -223,7 +237,7 @@ def prestaISBN(pISBN, state, owner):
 		try:
 			checkEsiste=statoUtenti[owner]
 		except KeyError:
-			strPrestito="L'utente è inesistente"
+			strPrestito=_("L'utente è inesistente")
 		else:
 			ISBNuse[pISBN.upper()] = state
 			ISBNown[pISBN.upper()] = owner
@@ -231,15 +245,15 @@ def prestaISBN(pISBN, state, owner):
 			data_fine = datetime.today() + timedelta(days=borrowTime)
 			res = data_fine.strftime('%d/%m/%Y')
 			ISBNborrowDate[pISBN] = data_prestito
-			strPrestito=strPrestito+"Libro:\t" + ISBNTotit(pISBN).title() + "\nAutore: " + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + "\nPosizione:\t" + isbnPos[pISBN] + "\n" + 50 * '-' + '\n Stato:\n'
+			strPrestito=strPrestito+_("Libro:\t") + ISBNTotit(pISBN).title() + _("\nAutore: ") + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + _("\nPosizione:\t") + isbnPos[pISBN] + "\n" + 50 * '-' + _('\n Stato:\n')
 			if state == 0:
-				strPrestito=strPrestito+"Prestato a: " + owner+'\n'
-				strPrestito=strPrestito+"RENDERE ENTRO:\n"
+				strPrestito=strPrestito+_("Prestato a: ") + owner+'\n'
+				strPrestito=strPrestito+_("RENDERE ENTRO:\n")
 				strPrestito=strPrestito+ res+'\n'
 			elif state == 1:
-				strPrestito=strPrestito+"Reso da: " + oldOwner+'\n'
+				strPrestito=strPrestito+_("Reso da: ") + oldOwner+'\n'
 				ISBNown[pISBN] = "Biblioteca"
-				strPrestito=strPrestito+ "Prestato il: "+ISBNborrowDate[pISBN]+'\n'
+				strPrestito=strPrestito+ _("Prestato il: ")+ISBNborrowDate[pISBN]+'\n'
 			o = open('bibliodb.json', 'w')
 			json.dump(
 				(ISBNuse,
@@ -254,9 +268,9 @@ def prestaISBN(pISBN, state, owner):
 				o)
 			o.close()
 			#except KeyError:
-			#   print"ERRORE"
+			#   print_("Errore")
 	else:
-		strPrestito="Il titolo è stato prestato in data "+ISBNborrowDate[pISBN]
+		strPrestito=_("Il titolo è stato prestato in data ")+ISBNborrowDate[pISBN]
 	return strPrestito
 def auth(user,password):
 	h = SHA512.new()
@@ -266,9 +280,9 @@ def auth(user,password):
 		if password==h.hexdigest():
 			return tipoUtenti[user]
 		else:
-			return "Password Sbagliata"
+			return _("Password Sbagliata")
 	except:
-		return "Utente inesistente"
+		return _("Utente inesistente")
 def lista():
     list=""
     for isbn, num in isbnPos.items():
@@ -276,7 +290,7 @@ def lista():
     return list
 def tsvExport():
     export = ""
-    export=export +"ISBN o Codice\tTitolo\tAutore\tPosizione\n"
+    export=export +_("ISBN o Codice\tTitolo\tAutore\tPosizione\n")
     for isbn, num in isbnPos.items():
         try:
             export=export+isbn +"\t" +ISBNTotit(isbn).title() +"\t" +ISBNToAut(isbn).title() +"\t" +num.upper() +"\n"
@@ -289,7 +303,7 @@ def AggiungiUtente(user, password, codTessera,badge):
 	if auth(user,password)=="admin":
 		return addUser(codTessera,badge)
 	else:
-		return"Non Autorizzato!"
+		return _("Non Autorizzato!")
 @app.route('/rfid/auth/<rfid>')
 def checkBadge(rfid):
 	if ipEnabled==True:
@@ -304,7 +318,7 @@ def checkBadge(rfid):
 				else:
 					authStatus="3"
 			except:
-				authStatus="Errore"
+				authStatus=_("Errore")
 	else:
 		try:
 			if tipoUtenti[badge[urllib2.unquote(rfid).lower()]]=="admin":
@@ -312,7 +326,7 @@ def checkBadge(rfid):
 			else:
 				authStatus="3"
 		except:
-			authStatus="Errore"
+			authStatus=_("Errore")
 	return Response(response=authStatus, status=200,mimetype="text/plain")
 @app.route('/auth/<user>/<password>')
 def checkUser(user,password):
@@ -372,16 +386,16 @@ def gBooksParser(isbnapi, inforeq):
 def rfidAdd(user,password,rfid,isbn):
 	if auth(user,password)=='admin':
 		rfidISBN[urllib2.unquote(rfid).lower]=urllib2.unquote(isbn).lower
-		resp=Response(response="Registrato "+isbn, status=200,mimetype="text/plain")
+		resp=Response(response=_("Registrato ")+isbn, status=200,mimetype="text/plain")
 	else:
-		resp="Non Autorizzato!"
+		resp=_("Non Autorizzato!")
 	return resp
 @app.route('/rfid/isbn/<rfid>')
 def rfidISBN(rfid):
 	try:
 		resp=Response(response=rfidISBN[urllib2.unquote(rfid).lower], status=200,mimetype="text/plain")
 	except:
-		resp=Response(response="Errore", status=200,mimetype="text/plain")
+		resp=Response(response=_("Errore"), status=200,mimetype="text/plain")
 	return resp
 @app.route('/rfid/auth/')
 @app.route('/isbninfo/titolo/<isbn>')
@@ -394,10 +408,10 @@ def scheda(titolo):
 	try:
 		isbn=str(titToISBN(urllib2.unquote(titolo.lower())))
 		if ISBNown[isbn.upper()]=="Biblioteca":
-			statoLibro="Non prestato"
+			statoLibro=_("Non prestato")
 		else:
-			statoLibro="Prestato"
-		resp=Response(response="\nTitolo: "+titolo.title()+"\nAutore: "+ISBNToAut(str(isbn).upper()).title()+"\nPosizione: "+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+"\nStato: "+statoLibro, status=200,mimetype="text/plain")
+			statoLibro=_("Prestato")
+		resp=Response(response=_("\nTitolo: ")+titolo.title()+_("\nAutore: ")+ISBNToAut(str(isbn).upper()).title()+_("\nPosizione: ")+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+_("\nStato: ")+statoLibro, status=200,mimetype="text/plain")
 	except:
 #		resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
 		resp=Response(response=titolo+'\n'+isbn+'\n'+traceback.format_exc(),status=200,mimetype="text/plain")
@@ -434,7 +448,7 @@ def tsvGetter():
 	return resp
 @app.route('/')
 def Welcome():
-	return'<html><head><title>BiblioDB API</title></head><body><h1>Benvenuti in BiblioDB!</h1><br><p>Per utilizzare le api bisogna modificare lo URL.</p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="VFZK6WR23YBQL"><input type="image" src="https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - Il metodo rapido, affidabile e innovativo per pagare e farsi pagare."><img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1"></form></body></html>'
+	return _('<html><head><title>BiblioDB API</title></head><body><h1>Benvenuti in BiblioDB!</h1><br><p>Per utilizzare le api bisogna modificare lo URL.</p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="VFZK6WR23YBQL"><input type="image" src="https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - Il metodo rapido, affidabile e innovativo per pagare e farsi pagare."><img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1"></form></body></html>')
 @app.route('/qrcode.png')
 def QrCode():
 	try:
@@ -447,7 +461,7 @@ def QrCode():
 		return Response(response=qr, status=200,mimetype="image/png")
 	#print url
 	except:
-		return "<h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
+		return _("<h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>")
 @app.route('/zipclient')
 def zipClient():
 	zipFile=open('BiblioDBnet.zip')
@@ -455,7 +469,7 @@ def zipClient():
 @app.route('/add/<user>/<password>/<titolo>/<isbn>/<autore>/<posizione>')
 def addBook(user,password,titolo,isbn,autore,posizione):
 	titolo=titolo.lower()
-	err401="<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
+	err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
 	if ipEnabled==True:
 		try:
 			ipR= ip[request.environ['REMOTE_ADDR']]
@@ -463,24 +477,24 @@ def addBook(user,password,titolo,isbn,autore,posizione):
 			return err401
 		else:
 			if auth(user,password)=="admin":
-				if add(titolo,isbn,autore,posizione)=="OK":
-					return "Titolo Aggiunto"
+				if add(titolo,isbn,autore,posizione)==_("OK"):
+					return _("Titolo Aggiunto")
 				else:
-					return "Errore"
+					return _("Errore")
 			else:
 				return err401
 
 	else:
 		if auth(user,password)=="admin":
-			if add(titolo,isbn,autore,posizione)=="OK":
+			if add(titolo,isbn,autore,posizione)==_("OK"):
 				return "Titolo Aggiunto"
 			else:
-				return "Errore"
+				return _("Errore")
 		else:
 			return err401
 @app.route('/presta/<userP>/<passwordP>/<isbnP>/<idB>/<statoP>')
 def prestaBook(userP,passwordP,isbnP,idB,statoP):
-	err401="<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
+	err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
 	if ipEnabled==True:
 		try:
 			ipR= ip[request.environ['REMOTE_ADDR']]
@@ -491,7 +505,7 @@ def prestaBook(userP,passwordP,isbnP,idB,statoP):
 				try:
 					return Response(response=prestaISBN(isbnP,int(statoP),idB), status=200,mimetype="text/plain")
 				except:
-					return "Errore"
+					return _("Errore")
 			else:
 				return err401
 	else:
@@ -499,7 +513,7 @@ def prestaBook(userP,passwordP,isbnP,idB,statoP):
 			try:
 				return Response(response=prestaISBN(isbnP,int(statoP),idB), status=200,mimetype="text/plain")
 			except:
-			 	return "Errore"
+			 	return _("Errore")
 		else:
 			return err401
 @app.route('/favicon.ico')
@@ -545,6 +559,7 @@ def update():
 			ISBNuse, isbnPos, titleIsbn, isbnTitle, isbnAuthor, nomeFile, ISBNown, borrowTime, ISBNborrowDate = json.load(
 				o)
 			o.close()
-		return "<h1>Il DataBase e stato aggiornato!</h1>"
+		return _("<h1>Il DataBase e stato aggiornato!</h1>")
 if __name__ == '__main__':
+	init_localization()
 	app.run(host='0.0.0.0')

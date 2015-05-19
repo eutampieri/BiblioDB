@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-05-19 15:31+CEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: api.py:191 api.py:209 api.py:330 api.py:338 api.py:407 api.py:492
+#: api.py:501 api.py:517 api.py:525
+msgid "Errore"
+msgstr "Error"
+
+#: api.py:194
+msgid ""
+"\n"
+"Attenzione: Il titolo del libro era già presente nel DataBase, perciò non è possibile trovare questo libro nella ricerca per titolo"
+msgstr "Warning: books's title has been already added to DataBase, so you won't find this book in title search"
+
+#: api.py:194
+msgid "Aggiunto "
+msgstr "Added"
+
+#: api.py:211 api.py:489 api.py:498
+msgid "OK"
+msgstr "OK"
+
+#: api.py:220
+msgid "Autore:"
+msgstr "Author:"
+
+#: api.py:220
+msgid "Posizione:"
+msgstr "Place:"
+
+#: api.py:220
+msgid "Titolo:"
+msgstr "Title:"
+
+#: api.py:249
+msgid "L'utente è inesistente"
+msgstr "Invalid user"
+
+#: api.py:257
+msgid ""
+"\n"
+" Stato:\n"
+msgstr ""
+
+#: api.py:257
+msgid ""
+"\n"
+"Posizione:\t"
+msgstr ""
+
+#: api.py:257
+msgid "Libro:\t"
+msgstr "Book:\t"
+
+#: api.py:257 api.py:423
+msgid ""
+"\n"
+"Autore: "
+msgstr ""
+
+#: api.py:259
+msgid "Prestato a: "
+msgstr "Lent to:"
+
+#: api.py:260
+msgid ""
+"RENDERE ENTRO:\n"
+msgstr "To be returned before:\n"
+
+#: api.py:263
+msgid "Reso da: "
+msgstr "Returned by: "
+
+#: api.py:265
+msgid "Prestato il: "
+msgstr "Lent on: "
+
+#: api.py:282
+msgid "Il titolo è stato prestato in data "
+msgstr "This book has been lent on "
+
+#: api.py:292
+msgid "Password Sbagliata"
+msgstr "Wrong password"
+
+#: api.py:294
+msgid "Utente inesistente"
+msgstr "Invalid user"
+
+#: api.py:302
+msgid ""
+"ISBN o Codice\tTitolo\tAutore\tPosizione\n"
+msgstr "ISBN or ID\tTitle\tAuthor\Place\n"
+
+#: api.py:315 api.py:400
+msgid "Non Autorizzato!"
+msgstr "Not Authorized!"
+
+#: api.py:398
+msgid "Registrato "
+msgstr "Registered "
+
+#: api.py:420
+msgid "Non prestato"
+msgstr "Not lent"
+
+#: api.py:422
+msgid "Prestato"
+msgstr "Lent"
+
+#: api.py:423
+msgid ""
+"\n"
+"Posizione: "
+msgstr ""
+
+#: api.py:423
+msgid ""
+"\n"
+"Stato: "
+msgstr ""
+
+#: api.py:423
+msgid ""
+"\n"
+"Titolo: "
+msgstr ""
+
+#: api.py:460
+msgid "<html><head><title>BiblioDB API</title></head><body><h1>Benvenuti in BiblioDB!</h1><br><p>Per utilizzare le api bisogna modificare lo URL.</p><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"><input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"><input type=\"hidden\" name=\"hosted_button_id\" value=\"VFZK6WR23YBQL\"><input type=\"image\" src=\"https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - Il metodo rapido, affidabile e innovativo per pagare e farsi pagare.\"><img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/it_IT/i/scr/pixel.gif\" width=\"1\" height=\"1\"></form></body></html>"
+msgstr "<html><head><title>BiblioDB API</title></head><body><h1>Welcome to BiblioDB!</h1><br><p>To use the API you have to edit the URL.</p><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\"><input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"><input type=\"hidden\" name=\"hosted_button_id\" value=\"VFZK6WR23YBQL\"><input type=\"image\" src=\"https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - Il metodo rapido, affidabile e innovativo per pagare e farsi pagare.\"><img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/it_IT/i/scr/pixel.gif\" width=\"1\" height=\"1\"></form></body></html>"
+
+#: api.py:473
+msgid "<h1>Errore</h1><p>Connettere il server ad Internet.<br><h2>Velocità Download:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
+msgstr "<h1>Error</h1><p>Connect the server to the Internet.<br><h2>Download Speed:</h2><br>Modem 56 kbps:\t1s<br>ADSL:\t<1s</p>"
+
+#: api.py:481 api.py:506
+msgid "<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>"
+msgstr "<html><head><title>Not Authorized</title></head><body><h1>Error 401 - Not authorized</h1><br><i>Probabily you aren't using this software on an authorized PC</i></body></html>"
+
+#: api.py:490
+msgid "Titolo Aggiunto"
+msgstr "Addedd Book"
+
+#: api.py:571
+msgid "<h1>Il DataBase e stato aggiornato!</h1>"
+msgstr "Database ahs been updated"
+
