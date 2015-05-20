@@ -157,9 +157,10 @@ def add(titolo,isbn,autore,pos):
 		try:
 			esiste=titolo[isbn]
 		except:
-			esistevaGia=True
-		else:
+			esistevaGia=False
 			titleIsbn[titolo] = isbn.upper()
+		else:
+			esistevaGia=True
 		finally:
 			isbnPos[isbn] = pos.upper()
 			isbnTitle[isbn] = titolo.lower()
@@ -179,10 +180,10 @@ def add(titolo,isbn,autore,pos):
 				o)
 			o.close()
 	except:
-		return _("Errore")
+		return _("Errore")+traceback.format_exc()
 	else:
 		if esistevaGia==True:
-			return _("Aggiunto ")+titolo.title()+_("\nAttenzione: Il titolo del libro era già presente nel DataBase, perciò non è possibile trovare questo libro nella ricerca per titolo")
+			return _("Aggiunto ")+titolo.title()+_("\nAttenzione: Il titolo del libro era gia presente nel DataBase, percio non e possibile trovare questo libro nella ricerca per titolo se si usa una vecchia versione del programma")
 		else:
 			return "Aggiunto "+titolo.title()
 	pass
@@ -197,7 +198,7 @@ def addUser(cod,badge):
 			o)
 		o.close()
 	except:
-		return _("Errore")
+		return _("Errore")+traceback.format_exc()
 	else:
 		return _("OK")
 	pass
@@ -268,7 +269,7 @@ def prestaISBN(pISBN, state, owner):
 				o)
 			o.close()
 			#except KeyError:
-			#   print_("Errore")
+			#   print_("Errore")+traceback.format_exc()
 	else:
 		strPrestito=_("Il titolo è stato prestato in data ")+ISBNborrowDate[pISBN]
 	return strPrestito
@@ -318,7 +319,7 @@ def checkBadge(rfid):
 				else:
 					authStatus="3"
 			except:
-				authStatus=_("Errore")
+				authStatus=_("Errore")+traceback.format_exc()
 	else:
 		try:
 			if tipoUtenti[badge[urllib2.unquote(rfid).lower()]]=="admin":
@@ -326,7 +327,7 @@ def checkBadge(rfid):
 			else:
 				authStatus="3"
 		except:
-			authStatus=_("Errore")
+			authStatus=_("Errore")+traceback.format_exc()
 	return Response(response=authStatus, status=200,mimetype="text/plain")
 @app.route('/auth/<user>/<password>')
 def checkUser(user,password):
@@ -474,7 +475,7 @@ def rfidISBN(rfid):
 	try:
 		resp=Response(response=rfidISBN[urllib2.unquote(rfid).lower], status=200,mimetype="text/plain")
 	except:
-		resp=Response(response=_("Errore"), status=200,mimetype="text/plain")
+		resp=Response(response=_("Errore")+traceback.format_exc(), status=200,mimetype="text/plain")
 	return resp
 @app.route('/rfid/auth/')
 @app.route('/isbninfo/titolo/<isbn>')
@@ -547,30 +548,27 @@ def zipClient():
 	return zipFile.read()
 @app.route('/add/<user>/<password>/<titolo>/<isbn>/<autore>/<posizione>')
 def addBook(user,password,titolo,isbn,autore,posizione):
-	titolo=titolo.lower()
-	err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
-	if ipEnabled==True:
-		try:
-			ipR= ip[request.environ['REMOTE_ADDR']]
-		except KeyError:
-			return err401
+	try:
+		titolo=titolo.lower()
+		err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
+		if ipEnabled==True:
+			try:
+				ipR= ip[request.environ['REMOTE_ADDR']]
+			except KeyError:
+				return err401
+			else:
+				if auth(user,password)=="admin":
+					return add(titolo,isbn,autore,posizione)
+				else:
+					return err401
+
 		else:
 			if auth(user,password)=="admin":
-				if add(titolo,isbn,autore,posizione)==_("OK"):
-					return _("Titolo Aggiunto")
-				else:
-					return _("Errore")
+				return add(titolo,isbn,autore,posizione)
 			else:
 				return err401
-
-	else:
-		if auth(user,password)=="admin":
-			if add(titolo,isbn,autore,posizione)==_("OK"):
-				return "Titolo Aggiunto"
-			else:
-				return _("Errore")
-		else:
-			return err401
+	except:
+		return traceback.format_exc()
 @app.route('/presta/<userP>/<passwordP>/<isbnP>/<idB>/<statoP>')
 def prestaBook(userP,passwordP,isbnP,idB,statoP):
 	err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
@@ -584,7 +582,7 @@ def prestaBook(userP,passwordP,isbnP,idB,statoP):
 				try:
 					return Response(response=prestaISBN(isbnP,int(statoP),idB), status=200,mimetype="text/plain")
 				except:
-					return _("Errore")
+					return _("Errore")+traceback.format_exc()
 			else:
 				return err401
 	else:
@@ -592,7 +590,7 @@ def prestaBook(userP,passwordP,isbnP,idB,statoP):
 			try:
 				return Response(response=prestaISBN(isbnP,int(statoP),idB), status=200,mimetype="text/plain")
 			except:
-			 	return _("Errore")
+			 	return _("Errore")+traceback.format_exc()
 		else:
 			return err401
 @app.route('/favicon.ico')
