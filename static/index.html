@@ -47,7 +47,7 @@
 		 if (localStorage.uuid) {
 		 	UUID=localStorage.uuid;
 		} else {
-		    localStorage.uuid = generateUUID;
+		    localStorage.uuid = generateUUID();
 		    UUID=localStorage.uuid;
 		}
 		var ip=window.location.hostname;
