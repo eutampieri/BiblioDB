@@ -80,8 +80,8 @@
 				var lista=listareq.responseText;
 				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
 				if(getMobileOS()!='unknown'){
-					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+":'+porta+'/static/cookie.html?=EAN";
-					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+":'+porta+'/static/cookie.html?=EAN";
+					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+':'+porta+'/static/cookie.html?=EAN';
+					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+':'+porta+'/static/cookie.html?=EAN';
 				}
 				else{
 					 document.getElementById("scan").className="nascosto"
