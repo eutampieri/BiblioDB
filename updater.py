@@ -15,14 +15,13 @@ def update():
 	finally:
 		o = open('uuid', 'r')
 		Uuid=o.read()
-	 	o.close()
+		o.close()
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
 	versionfile=open('version','r')
 	actualVersion=int(versionfile.read())
 	versionfile.close()
 	try:
 		gesturl="http://serverseutampieri.ddns.net:4049/provision/"+str(Uuid)+"/Python-main-updater/"+str(actualVersion)
-		print gesturl
 		sendGestionale = urllib2.urlopen(gesturl)
 		Gestionale=sendGestionale.read()
 	except:
@@ -43,4 +42,3 @@ def update():
 			return "Aggiornato!"
 def Cupdate():
 	update()
-print update()
