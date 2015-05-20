@@ -21,8 +21,10 @@ def update():
 	actualVersion=int(versionfile.read())
 	versionfile.close()
 	try:
-		sendGestionale = urllib2.urlopen("http://serverseutampieri.ddns.net:4049/provision/"+Uuid+"/Python-main-updater/"+actualVersion)
-		Gestionale=int(sendGestionale.read())
+		gesturl="http://serverseutampieri.ddns.net:4049/provision/"+str(Uuid)+"/Python-main-updater/"+str(actualVersion)
+		print gesturl
+		sendGestionale = urllib2.urlopen(gesturl)
+		Gestionale=sendGestionale.read()
 	except:
 		return "Non riesco a connettermi alla telegestione a causa di un Errore Internet"
 	try:
@@ -41,3 +43,4 @@ def update():
 			return "Aggiornato!"
 def Cupdate():
 	update()
+print update()
