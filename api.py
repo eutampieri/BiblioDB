@@ -444,7 +444,7 @@ def cercaTitoloHtml(titolo):
 @app.route('/cercahtml/autore/<titolo>')
 def cercaAutoreHtml(titolo):
 	titolo=titolo.lower()
-	trt=""
+	trt='<table style="border:none;">'
 	for isbn, titoloDict in isbnAuthor.items():
 		if titoloDict.find(titolo)!=-1:
 			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -461,7 +461,7 @@ def cercaAutoreHtml(titolo):
 				resp='<br>'+titoloDict+'<br>'+isbn+'<br>'+traceback.format_exc()+'<br>----------------------------------'
 			finally:
 				trt=trt+ resp
-	return Response(response=trt,status=200,mimetype="text/html")
+	return Response(response=(trt+'</td></tr></table>'),status=200,mimetype="text/html")
 @app.route('/rfid/add/<user>/<password>/<rfid>/<isbn>')
 def rfidAdd(user,password,rfid,isbn):
 	if auth(user,password)=='admin':
