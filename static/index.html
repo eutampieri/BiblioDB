@@ -33,6 +33,23 @@
 	<script src="js/et-software.js"></script>
 	<script src="js/sha512.js"></script>
 	<script type="text/javascript">
+		var version=200;
+		var UUID;
+		function generateUUID() {
+		    var d = new Date().getTime();
+		    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		        var r = (d + Math.random()*16)%16 | 0;
+		        d = Math.floor(d/16);
+		        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+		    });
+		    return uuid;
+		}
+		 if (localStorage.uuid) {
+		 	UUID=localStorage.uuid;
+		} else {
+		    localStorage.uuid = generateUUID;
+		    UUID=localStorage.uuid;
+		}
 		var ip=window.location.hostname;
 		if(location.port==null||location.port==0){
 			var porta=80;
@@ -87,6 +104,10 @@
 					 document.getElementById("scan").className="nascosto"
 					 document.getElementById("Pscan").className="nascosto"
 				}
+				var trackVer = new XMLHttpRequest();
+				trackVer.open('GET', 'http://serverseutampieri.ddns.net:4049/provision/'+UUID+'/WebApp-'+getMobileOS()+'/'+version, false);
+				trackVer.send(null);
+				var resVer=trackVer.responseText;
 		}
 		function naviga(pagina){
 			window.location.replace('http://'+ip+':'+porta+'/static/index.html#page'+pagina);
