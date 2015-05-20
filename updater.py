@@ -16,7 +16,6 @@ def update():
 		o = open('uuid', 'r')
 		Uuid=o.read()
 	 	o.close()
-	print response
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
 	versionfile=open('version','r')
 	actualVersion=int(versionfile.read())
