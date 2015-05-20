@@ -22,7 +22,7 @@ def update():
 	actualVersion=int(versionfile.read())
 	versionfile.close()
 	try:
-		sendGestionale = urllib2.urlopen("http://serverseutampieri.ddns.net:5000/provision/"+Uuid+"/Python-main-updater/"+actualVersion)
+		sendGestionale = urllib2.urlopen("http://serverseutampieri.ddns.net:4049/provision/"+Uuid+"/Python-main-updater/"+actualVersion)
 		gitVersion=int(version.read())
 	except:
 		return "Non riesco a connettermi alla telegestione a causa di un Errore Internet"
