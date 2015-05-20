@@ -25,7 +25,7 @@ def init_localization():
   except IOError:
     trans = gettext.NullTranslations()
   trans.install()
-Cupdate()
+print Cupdate()
 # the block size for the cipher object; must be 16, 24, or 32 for AES
 BLOCK_SIZE = 32
  
@@ -382,6 +382,85 @@ def gBooksParser(isbnapi, inforeq):
 			neterror=open('nodata.jpg')
 			gapi= Response(response=neterror.read(), status=200,mimetype="image/jpeg")
 	return gapi
+@app.route('/cerca/titolo/<titolo>')
+def cercaTitolo(titolo):
+	titolo=titolo.lower()
+	trt=""
+	for isbn, titoloDict in isbnTitle.items():
+		if titoloDict.find(titolo)!=-1:
+			try:
+				if ISBNown[isbn.upper()]=="Biblioteca":
+					statoLibro=_("Non prestato")
+				else:
+					statoLibro=_("Prestato")
+				resp=_("\nTitolo: ")+titoloDict.title()+_("\nAutore: ")+ISBNToAut(str(isbn).upper()).title()+_("\nPosizione: ")+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+_("\nStato: ")+statoLibro+"\n----------------------------------"
+			except:
+			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+				resp='\n'+titoloDict+'\n'+isbn+'\n'+traceback.format_exc()+'\n----------------------------------'
+			finally:
+				trt=trt+ resp
+	return Response(response=trt,status=200,mimetype="text/plain")
+@app.route('/cerca/autore/<titolo>')
+def cercaAutore(titolo):
+	titolo=titolo.lower()
+	trt=""
+	for isbn, titoloDict in isbnAuthor.items():
+		if titoloDict.find(titolo)!=-1:
+			try:
+				if ISBNown[isbn.upper()]=="Biblioteca":
+					statoLibro=_("Non prestato")
+				else:
+					statoLibro=_("Prestato")
+				resp=_("\nTitolo: ")+isbnTitle[isbn.upper()].title()+_("\nAutore: ")+ISBNToAut(str(isbn).upper()).title()+_("\nPosizione: ")+isbnPos[isbn.upper()].upper()+"\nISBN: "+isbn.upper()+_("\nStato: ")+statoLibro+"\n----------------------------------"
+			except:
+			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+				resp='\n'+titoloDict+'\n'+isbn+'\n'+traceback.format_exc()+'\n----------------------------------'
+			finally:
+				trt=trt+ resp
+	return Response(response=trt,status=200,mimetype="text/plain")
+@app.route('/cercahtml/titolo/<titolo>')
+def cercaTitoloHtml(titolo):
+	titolo=titolo.lower()
+	trt='<table style="border:none;">'
+	for isbn, titoloDict in isbnTitle.items():
+		if titoloDict.find(titolo)!=-1:
+			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+			s.connect(("etsoftware.forumfree.it",80))
+			url="http://"+s.getsockname()[0]+":5000/gbooks/"+isbn+"/copertina"
+			s.close()
+			try:
+				if ISBNown[isbn.upper()]=="Biblioteca":
+					statoLibro=_("Non prestato")
+				else:
+					statoLibro=_("Prestato")
+				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+titoloDict.title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro
+			except:
+			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+				resp='<br>'+titoloDict+'<br>'+isbn+'<br>'+traceback.format_exc()+'<br>----------------------------------'
+			finally:
+				trt=trt+ resp
+	return Response(response=(trt+'</td></tr></table>'),status=200,mimetype="text/html")
+@app.route('/cercahtml/autore/<titolo>')
+def cercaAutoreHtml(titolo):
+	titolo=titolo.lower()
+	trt=""
+	for isbn, titoloDict in isbnAuthor.items():
+		if titoloDict.find(titolo)!=-1:
+			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+			s.connect(("etsoftware.forumfree.it",80))
+			url="http://"+s.getsockname()[0]+":5000/gbooks/"+isbn+"/copertina"
+			try:
+				if ISBNown[isbn.upper()]=="Biblioteca":
+					statoLibro=_("Non prestato")
+				else:
+					statoLibro=_("Prestato")
+				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+isbnTitle[isbn.upper()].title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro
+			except:
+			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
+				resp='<br>'+titoloDict+'<br>'+isbn+'<br>'+traceback.format_exc()+'<br>----------------------------------'
+			finally:
+				trt=trt+ resp
+	return Response(response=trt,status=200,mimetype="text/html")
 @app.route('/rfid/add/<user>/<password>/<rfid>/<isbn>')
 def rfidAdd(user,password,rfid,isbn):
 	if auth(user,password)=='admin':

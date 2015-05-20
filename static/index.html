@@ -41,16 +41,19 @@
 			var porta=location.port;
 		}
 		function cerca(){
+			var url="";
+			var idtype=parseInt(document.getElementById("titoaut").value);
+			if(idtype==0){//titolo
+				url='http://'+ip+':'+porta+'/cercahtml/titolo/'+document.getElementById('textinput2').value;
+			}
+			else if(idtype==1){//autore
+				url='http://'+ip+':'+porta+'/cercahtml/autore/'+document.getElementById('textinput2').value;
+			}
 			var schedareq = new XMLHttpRequest();
-			schedareq.open('GET', 'http://'+ip+':'+porta+'/isbninfo/scheda/'+document.getElementById('textinput2').value, false);
+			schedareq.open('GET', url, false);
 			schedareq.send(null);
 			scheda=schedareq.responseText;
-			document.getElementById("cercaBox").innerHTML=scheda.replace(new RegExp('\r?\n','g'), '<br />');
-			var req = new XMLHttpRequest();
-			req.open('GET', 'http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById('textinput2').value, false);
-			req.send(null);
-			isbn=req.responseText;
-			document.getElementById("cover").src="http://"+ip+":'+porta+'/gbooks/"+isbn+"/copertina";
+			document.getElementById("cercaBox").innerHTML=scheda;
 		}
 		function getMobileOS() {
 		  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -316,18 +319,20 @@
 				</label>
 				<input name="" id="textinput2" placeholder="" value="" type="text">
 			</div>
+			<div data-role="fieldcontain" data-controltype="selectmenu" style="text-align:center;">
+				<select id="titoaut" name="">
+					<option value="0">
+						Titolo
+					</option>
+					<option value="1">
+						Autore
+					</option>
+				</select>
+			</div>
 			<a data-role="button" onclick="cerca()">
 				Cerca
 			</a>
-			<table style="border:none;">
-				<tr>
-					<td style="width:auto;">
-						<img alt="" id="cover" src="//static/nodata.jpg">
-					</td>
-					<td id="cercaBox">
-					</td>
-				</tr>
-			</table>
+			<div id="cercaBox"></div>
 		</div>
 		<div data-role="tabbar" data-iconpos="top" data-theme="a">
 				<ul>
