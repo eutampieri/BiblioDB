@@ -1,30 +1,31 @@
 import urllib2
 import platform
 from os import system
+from uuid import uuid4
+import json
 def update():
+	try:
+		o = open('uuid', 'r')
+	except IOError:
+		o = open('uuid', 'w')
+		o.write(str(uuid4()))
+		o.close()
+	else:
+		o.close()
+	finally:
+		o = open('uuid', 'r')
+		Uuid=o.read()
+	 	o.close()
+	print response
 	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
 	versionfile=open('version','r')
 	actualVersion=int(versionfile.read())
 	versionfile.close()
 	try:
-		version = urllib2.urlopen(url)
+		sendGestionale = urllib2.urlopen("http://serverseutampieri.ddns.net:5000/provision/"+Uuid+"/Python-main-updater/"+actualVersion)
 		gitVersion=int(version.read())
 	except:
-		return "Non riesco a ottenere\nla lista delle versioni\na causa di un\nErrore Internet"
-	else:
-		if gitVersion>actualVersion:
-			if platform.system()=="Linux" or platform.system()=="Darwin":
-				system("git pull origin master")
-				exit()
-			else:
-				return "Visitare la pagina web https://github.com/eutampieri/BiblioDB/releases"
-		else:
-			return "Aggiornato!"
-def Cupdate():
-	url="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/version"
-	versionfile=open('version','r')
-	actualVersion=int(versionfile.read())
-	versionfile.close()
+		return "Non riesco a connettermi alla telegestione a causa di un Errore Internet"
 	try:
 		version = urllib2.urlopen(url)
 		gitVersion=int(version.read())
@@ -39,3 +40,5 @@ def Cupdate():
 				return "Visitare la pagina web https://github.com/eutampieri/BiblioDB/releases"
 		else:
 			return "Aggiornato!"
+def Cupdate():
+	update()
