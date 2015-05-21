@@ -94,31 +94,31 @@
 			if(getMobileOS()=="unknown"){
 				 if(navigator.userAgent.indexOf("Chrome") != -1 ) 
 				{
-				    return 'Chrome-'+navigator.platform;
+				    return 'Chrome-'+navigator.platform.replace(/\s+/g, '');
 				}
 				else if(navigator.userAgent.indexOf("Opera") != -1 )
 				{
-				 return 'Opera-'+navigator.platform;
+				 return 'Opera-'+navigator.platform.replace(/\s+/g, '');
 				}
 				else if(navigator.userAgent.toLowerCase().indexOf("opr") != -1 )
 				{
-				 return 'Opera-'+navigator.platform;
+				 return 'Opera-'+navigator.platform.replace(/\s+/g, '');
 				}
 				else if(navigator.userAgent.toLowerCase().indexOf("trident") != -1 )
 				{
-				 return 'IE-'+navigator.platform;
+				 return 'IE-'+navigator.platform.replace(/\s+/g, '');
 				}
 				else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
 				{
-				     return 'Firefox-'+navigator.platform;
+				     return 'Firefox-'+navigator.platform.replace(/\s+/g, '');
 				}
 				else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
 				{
-				  return 'IE-'+navigator.platform;
+				  return 'IE-'+navigator.platform.replace(/\s+/g, '');
 				}  
 				else 
 				{
-				   return 'unknown-on-'+navigator.platform;
+				   return 'unknown-on-'+navigator.platform.replace(/\s+/g, '');
 				}
 			}
 			else{
