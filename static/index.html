@@ -94,23 +94,31 @@
 			if(getMobileOS()=="unknown"){
 				 if(navigator.userAgent.indexOf("Chrome") != -1 ) 
 				{
-				    return 'Chrome';
+				    return 'Chrome-'+navigator.platform;
 				}
 				else if(navigator.userAgent.indexOf("Opera") != -1 )
 				{
-				 return 'Opera';
+				 return 'Opera-'+navigator.platform;
+				}
+				else if(navigator.userAgent.toLowerCase().indexOf("opr") != -1 )
+				{
+				 return 'Opera-'+navigator.platform;
+				}
+				else if(navigator.userAgent.toLowerCase().indexOf("trident") != -1 )
+				{
+				 return 'IE-'+navigator.platform;
 				}
 				else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
 				{
-				     return 'Firefox';
+				     return 'Firefox-'+navigator.platform;
 				}
 				else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
 				{
-				  return 'IE';
+				  return 'IE-'+navigator.platform;
 				}  
 				else 
 				{
-				   return 'unknown';
+				   return 'unknown-on-'+navigator.platform;
 				}
 			}
 			else{
