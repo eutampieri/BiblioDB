@@ -569,6 +569,47 @@ def addBook(user,password,titolo,isbn,autore,posizione):
 				return err401
 	except:
 		return traceback.format_exc()
+@app.route('/delete/<user>/<password>/<scheda>')
+def deleteBook(user,password,titolo,scheda):
+	try:
+		titolo=titolo.lower()
+		err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
+		if ipEnabled==True:
+			try:
+				ipR= ip[request.environ['REMOTE_ADDR']]
+			except KeyError:
+				return err401
+			else:
+				if auth(user,password)=="admin":
+					ISBNuse.pop(scheda)
+					isbnPos.pop(scheda)
+					titleIsbn.pop(ISBNTotit(scheda))
+					isbnAuthor.pop(scheda)
+					ISBNown.pop(scheda)
+					ISBNborrowDate.pop(scheda)
+					s=open('bibliodb.json','w')
+					json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),s)
+					s.close()
+					return 'La voce '+scheda+' e stata eliminata correttamente!'
+				else:
+					return err401
+
+		else:
+			if auth(user,password)=="admin":
+					ISBNuse.pop(scheda)
+					isbnPos.pop(scheda)
+					titleIsbn.pop(ISBNTotit(scheda))
+					isbnAuthor.pop(scheda)
+					ISBNown.pop(scheda)
+					ISBNborrowDate.pop(scheda)
+					s=open('bibliodb.json','w')
+					json.dump((ISBNuse,isbnPos,titleIsbn,isbnTitle,isbnAuthor,fileName,ISBNown,borrowtime,ISBNborrowDate),s)
+					s.close()
+					return 'La voce '+scheda+' e stata eliminata correttamente!'
+			else:
+				return err401
+	except:
+		return traceback.format_exc()
 @app.route('/presta/<userP>/<passwordP>/<isbnP>/<idB>/<statoP>')
 def prestaBook(userP,passwordP,isbnP,idB,statoP):
 	err401=_("<html><head><title>Non Autorizzato</title></head><body><h1>Errore 401 - Non autorizzato</h1><br><i>Probabilmente si sta usando il programma su un dispositivo non autorizzato</i></body></html>")
