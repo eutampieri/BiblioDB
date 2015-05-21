@@ -40,5 +40,24 @@ def update():
 				return "Visitare la pagina web https://github.com/eutampieri/BiblioDB/releases"
 		else:
 			return "Aggiornato!"
+			wurl="https://raw.githubusercontent.com/eutampieri/BiblioDB/master/webappVersion"
+			wversionfile=open('webappVersion','r')
+			actualwVersion=int(versionfile.read())
+			wversionfile.close()
+			try:
+				wversion = urllib2.urlopen(url)
+				gitwVersion=int(wversion.read())
+			except:
+				return "Non riesco a ottenere la lista delle versioni a causa di un Errore Internet"
+			else:
+				if gitwVersion>actualwVersion:
+					if platform.system()=="Linux" or platform.system()=="Darwin":
+						system("git pull origin master")
+						exit()
+					else:
+						return "Visitare la pagina web https://github.com/eutampieri/BiblioDB/releases"
+				else:
+					return "Aggiornato!"
+
 def Cupdate():
 	update()
