@@ -21,7 +21,7 @@ def update():
 	actualVersion=int(versionfile.read())
 	versionfile.close()
 	try:
-		gesturl="http://serverseutampieri.ddns.net:4049/provision/"+str(Uuid)+"/Python-main-updater/"+str(actualVersion)
+		gesturl="http://serverseutampieri.ddns.net:4049/provision/"+str(Uuid)+"/PythonMainUpdater-"+platform.system()+"/"+str(actualVersion)
 		sendGestionale = urllib2.urlopen(gesturl)
 		Gestionale=sendGestionale.read()
 	except:

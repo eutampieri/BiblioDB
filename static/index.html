@@ -33,7 +33,7 @@
 	<script src="js/et-software.js"></script>
 	<script src="js/sha512.js"></script>
 	<script type="text/javascript">
-		var version=200;
+		var version=201;
 		var UUID;
 		function generateUUID() {
 		    var d = new Date().getTime();
@@ -90,6 +90,14 @@
 		    return 'unknown';
 		  }
 		}
+		function getOS(){
+			if(getMobileOS()=="unknown"){
+				return navigator.userAgent || navigator.vendor || window.opera;
+			}
+			else{
+				return getMobileOS()
+			}
+		}
 		function lista(){
 				var listareq = new XMLHttpRequest();
 				listareq.open('GET', 'http://'+ip+':'+porta+'/lista', false);
@@ -105,7 +113,7 @@
 					 document.getElementById("Pscan").className="nascosto"
 				}
 				var trackVer = new XMLHttpRequest();
-				trackVer.open('GET', 'http://serverseutampieri.ddns.net:4049/provision/'+UUID+'/WebApp-'+getMobileOS()+'/'+version, false);
+				trackVer.open('GET', 'http://serverseutampieri.ddns.net:4049/provision/'+UUID+'/WebApp-'+getOS()+'/'+version, false);
 				trackVer.send(null);
 				var resVer=trackVer.responseText;
 		}
