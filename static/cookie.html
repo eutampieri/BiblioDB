@@ -1,5 +1,6 @@
 <html>
 <head>
+	<script src="js/bibliodb.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
 	<style type="text/css">
 	body{
@@ -16,7 +17,7 @@
 	<script type="text/javascript">
 	function cookie(){
 		isbn=window.location.search.replace("?&ean=", "");
-		document.cookie="isbn="+isbn;
+		setCookie("isbn=",isbn,-1);
 	}
 	</script>
 </head>

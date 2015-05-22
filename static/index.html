@@ -32,23 +32,36 @@
 	<script src="js/codiqa.ext.min.js"></script>
 	<script src="js/et-software.js"></script>
 	<script src="js/sha512.js"></script>
+	<script src="js/bibliodb.js"></script>
 	<script type="text/javascript">
-		var version=204;
+		var version=205;
 		var UUID;
-		function generateUUID() {
-		    var d = new Date().getTime();
-		    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		        var r = (d + Math.random()*16)%16 | 0;
-		        d = Math.floor(d/16);
-		        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-		    });
-		    return uuid;
+		if(getMobileOS!="iOS"){
+			if(checkCookie("cookie"){
+				if (checkCookie("uuid")) {
+				 	UUID=getCookie("uuid");
+				} else {
+				    setCookie("uuid",generateUUID(),-1);
+				 	UUID=getCookie("uuid");
+				}
+			}
+			else{
+			    var r = confirm("Attenzione!\nBiblioDB usa i cookie su:\n* Dispositivi iOS e Android: Scansione codici a barre\n* Tutti i dispositivi: Controllare che si stia eseguendo la versione aggiornata del software");
+			    if (r == true) {
+			    	setCookie("cookie","true",-1);
+			        setCookie("uuid",generateUUID(),-1);
+				 	UUID=getCookie("uuid");
+			    }
+			}
 		}
-		 if (localStorage.uuid) {
-		 	UUID=localStorage.uuid;
-		} else {
-		    localStorage.uuid = generateUUID();
-		    UUID=localStorage.uuid;
+		else{
+			alert("Attenzione!\nBiblioDB usa i cookie su:\n* Dispositivi iOS e Android: Scansione codici a barre\n* Tutti i dispositivi: Controllare che si stia eseguendo la versione aggiornata del software")
+			 if (localStorage.uuid) {
+			 	UUID=localStorage.uuid;
+			} else {
+			    localStorage.uuid = generateUUID();
+			    UUID=localStorage.uuid;
+			}
 		}
 		var ip=window.location.hostname;
 		if(location.port==null||location.port==0){
@@ -66,72 +79,13 @@
 			else if(idtype==1){//autore
 				url='http://'+ip+':'+porta+'/cercahtml/autore/'+document.getElementById('textinput2').value;
 			}
-			var schedareq = new XMLHttpRequest();
-			schedareq.open('GET', url, false);
-			schedareq.send(null);
-			scheda=schedareq.responseText;
+			scheda=getUrl(url);
 			document.getElementById("cercaBox").innerHTML=scheda;
 		}
-		function getMobileOS() {
-		  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-		  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) )
-		  {
-		    return 'iOS';
-
-		  }
-		  else if( userAgent.match( /Android/i ) )
-		  {
-
-		    return 'Android';
-		  }
-		  else
-		  {
-		    return 'unknown';
-		  }
-		}
-		function getOS(){
-			if(getMobileOS()=="unknown"){
-				 if(navigator.userAgent.indexOf("Chrome") != -1 ) 
-				{
-				    return 'Chrome-'+navigator.platform.replace(/\s+/g, '');
-				}
-				else if(navigator.userAgent.indexOf("Opera") != -1 )
-				{
-				 return 'Opera-'+navigator.platform.replace(/\s+/g, '');
-				}
-				else if(navigator.userAgent.toLowerCase().indexOf("opr") != -1 )
-				{
-				 return 'Opera-'+navigator.platform.replace(/\s+/g, '');
-				}
-				else if(navigator.userAgent.toLowerCase().indexOf("trident") != -1 )
-				{
-				 return 'IE-'+navigator.platform.replace(/\s+/g, '');
-				}
-				else if(navigator.userAgent.indexOf("Firefox") != -1 ) 
-				{
-				     return 'Firefox-'+navigator.platform.replace(/\s+/g, '');
-				}
-				else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
-				{
-				  return 'IE-'+navigator.platform.replace(/\s+/g, '');
-				}  
-				else 
-				{
-				   return 'unknown-on-'+navigator.platform.replace(/\s+/g, '');
-				}
-			}
-			else{
-				return getMobileOS()
-			}
-		}
 		function lista(){
-				var listareq = new XMLHttpRequest();
-				listareq.open('GET', 'http://'+ip+':'+porta+'/lista', false);
-				listareq.send(null);
-				var lista=listareq.responseText;
+				var lista=getUrl('http://'+ip+':'+porta+'/lista');
 				document.getElementById("listaBox").innerHTML=lista.replace(new RegExp('\r?\n','g'), '<br />');
-				if(getMobileOS()!='unknown'){
+				if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
 					document.getElementById("scan").href="pic2shop://scan?callback=http://"+ip+':'+porta+'/static/cookie.html?=EAN';
 					document.getElementById("Pscan").href="pic2shop://scan?callback=http://"+ip+':'+porta+'/static/cookie.html?=EAN';
 				}
@@ -139,26 +93,17 @@
 					 document.getElementById("scan").className="nascosto"
 					 document.getElementById("Pscan").className="nascosto"
 				}
-				var trackVer = new XMLHttpRequest();
-				trackVer.open('GET', 'http://serverseutampieri.ddns.net:4049/provision/'+UUID+'/WebApp-'+getOS()+'/'+version, false);
-				trackVer.send(null);
-				var resVer=trackVer.responseText;
+				var ver=getUrl('http://serverseutampieri.ddns.net:4049/provision/'+UUID+'/WebApp-'+getOS()+'/'+version);
 		}
 		function naviga(pagina){
 			window.location.replace('http://'+ip+':'+porta+'/static/index.html#page'+pagina);
-		}
-		function parametro(){
-			//alert(window.location.search.replace("?", ""));
 		}
 		var user="";
 		var password="";
 		function login(){
 			user=document.getElementById("textinput4").value;
 			password = CryptoJS.SHA512(document.getElementById("textinput3").value);
-			var checklogin = new XMLHttpRequest();
-			checklogin.open('GET', 'http://'+ip+':'+porta+'/auth/'+user+'/'+password, false);
-			checklogin.send(null);
-			result=parseInt(checklogin.responseText);
+			result=parseInt(getUrl('http://'+ip+':'+porta+'/auth/'+user+'/'+password));
 			if(result==2){
 				alert("Il terminale non è autorizzato\nContattare l'amministratore");
 			}
@@ -170,6 +115,9 @@
 				document.getElementById("benvenuto").className="visibile";
 				document.getElementById("benvenuto").innerHTML="<h3>Benvenuto!</h3><p>Caro "+user+", sei entrato correttamente nel sistema!";
 				document.getElementById("login").className="nascosto";
+			}
+			else{
+				alert("Controlla le credenziali");
 			}
 		}
 		function logout(){
@@ -218,20 +166,14 @@
 				pISBN=document.getElementById("titoisbn").value;
 			}
 			else if(idtype==2){
-				var apiISBN = new XMLHttpRequest();
-				apiISBN.open('GET', 'http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById("titoisbn").value, false);
-				apiISBN.send(null);
-				pISBN=apiISBN.responseText;
+				pISBN=getUrl('http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById("titoisbn").value);
 				if(pISBN=="0"){
 					alert("Controlla il titolo");
 				}
 			}
 			idB=document.getElementById("idtessera").value;
 			statoP=document.getElementById("prestaorientra").value;
-			var prestaApi = new XMLHttpRequest();
-			prestaApi.open('GET', 'http://'+ip+':'+porta+'/presta/'+user+'/'+password+'/'+pISBN+'/'+idB+'/'+statoP, false);
-			prestaApi.send(null);
-			document.getElementById("prestaBox").innerHTML=prestaApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+			document.getElementById("prestaBox").innerHTML=getUrl('http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById("titoisbn").value).replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		function add(){
 			document.getElementById("addBox").innerHTML="";
@@ -239,10 +181,7 @@
 			var autore=document.getElementById("autore").value;
 			var isbn=document.getElementById("isbn").value;
 			var posizione=document.getElementById("posizione").value;
-			var addApi = new XMLHttpRequest();
-			addApi.open('GET', 'http://'+ip+':'+porta+'/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione, false);
-			addApi.send(null);
-			document.getElementById("addBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+			document.getElementById("addBox").innerHTML=getUrl('http://'+ip+':'+porta+'/add/'+user+'/'+password+'/'+titolo+'/'+isbn+'/'+autore+'/'+posizione).replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		//@app.route('/users/add/<user>/<password>/<codTessera>/<badge>')
 		//def AggiungiUtente(user, password, codTessera,badge):
@@ -252,30 +191,21 @@
 			var badge=document.getElementById("badge").value;
 			var isbn=document.getElementById("isbn").value;
 			var posizione=document.getElementById("posizione").value;
-			var addApi = new XMLHttpRequest();
-			addApi.open('GET', 'http://'+ip+':'+porta+'/users/add/'+codTessera+'/'+badge, false);
-			addApi.send(null);
-			document.getElementById("addUBox").innerHTML=addApi.responseText.replace(new RegExp('\r?\n','g'), '<br />');
+			document.getElementById("addUBox").innerHTML=getUrl('http://'+ip+':'+porta+'/users/add/'+codTessera+'/'+badge).replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		function readISBN(){
-			if(getMobileOS()!='unknown'){
+			if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
 				var isbn=document.cookie.replace("isbn=","");
 			}
 			else{
 				var isbn=prompt("Inserisci l'ISBN", "ISBN");
 			}
-			var titoloApi = new XMLHttpRequest();
-			titoloApi.open('GET', 'http://'+ip+':'+porta+'/gbooks/'+isbn+'/titolo', false);
-			titoloApi.send(null);
-			var autoreApi = new XMLHttpRequest();
-			autoreApi.open('GET', 'http://'+ip+':'+porta+'/gbooks/'+isbn+'/autore', false);
-			autoreApi.send(null);
-			document.getElementById("autore").value=autoreApi.responseText;
-			document.getElementById("addTitolo").value=titoloApi.responseText;
+			document.getElementById("autore").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/titolo');
+			document.getElementById("addTitolo").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/autore');
 			document.getElementById("isbn").value=isbn;
 		}
 		function PreadISBN(){
-			if(getMobileOS()!='unknown'){
+			if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
 				var Pisbn=document.cookie.replace("isbn=","");
 			}
 			else{
@@ -284,6 +214,7 @@
 			document.getElementById("titoisbn").value=Pisbn;
 			document.getElementById("isbnotit").value=1;
 		}
+		$( "#page5" ).popup('open');
 	</script>
 	<style type="text/css">
 		.ui-icon-lock {
