@@ -234,44 +234,50 @@ def prestaISBN(pISBN, state, owner):
 	strPrestito=""
 	#try:
 	oldOwner=ISBNown[pISBN.upper()]
-	if oldOwner=="Biblioteca":
-		try:
-			checkEsiste=statoUtenti[owner]
-		except KeyError:
-			strPrestito=_("L'utente è inesistente")
-		else:
-			ISBNuse[pISBN.upper()] = state
-			ISBNown[pISBN.upper()] = owner
-			data_prestito = datetime.today().strftime('%d/%m/%Y')
-			data_fine = datetime.today() + timedelta(days=borrowTime)
-			res = data_fine.strftime('%d/%m/%Y')
-			ISBNborrowDate[pISBN] = data_prestito
-			strPrestito=strPrestito+_("Libro:\t") + ISBNTotit(pISBN).title() + _("\nAutore: ") + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + _("\nPosizione:\t") + isbnPos[pISBN] + "\n" + 50 * '-' + _('\n Stato:\n')
-			if state == 0:
+	try:
+		checkEsiste=statoUtenti[owner]
+	except KeyError:
+		strPrestito=_("L'utente è inesistente")
+	else:
+		if state == 0:
+			if oldOwner=="Biblioteca":
+				ISBNuse[pISBN.upper()] = state
+				ISBNown[pISBN.upper()] = owner
+				data_prestito = datetime.today().strftime('%d/%m/%Y')
+				data_fine = datetime.today() + timedelta(days=borrowTime)
+				res = data_fine.strftime('%d/%m/%Y')
+				ISBNborrowDate[pISBN] = data_prestito
+				strPrestito=strPrestito+_("Libro:\t") + ISBNTotit(pISBN).title() + _("\nAutore: ") + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + _("\nPosizione:\t") + isbnPos[pISBN] + "\n" + 50 * '-' + _('\n Stato:\n')
 				strPrestito=strPrestito+_("Prestato a: ") + owner+'\n'
 				strPrestito=strPrestito+_("RENDERE ENTRO:\n")
 				strPrestito=strPrestito+ res+'\n'
-			elif state == 1:
+			else:
+				strPrestito=_("Il titolo è stato prestato in data ")+ISBNborrowDate[pISBN]
+		elif state == 1:
+			if oldOwner!="Biblioteca":
+				ISBNuse[pISBN.upper()] = state
+				ISBNown[pISBN.upper()] = owner
+				strPrestito=strPrestito+_("Libro:\t") + ISBNTotit(pISBN).title() + _("\nAutore: ") + ISBNToAut(pISBN).title() + "\nISBN: \t" + pISBN + _("\nPosizione:\t") + isbnPos[pISBN] + "\n" + 50 * '-' + _('\n Stato:\n')
 				strPrestito=strPrestito+_("Reso da: ") + oldOwner+'\n'
 				ISBNown[pISBN] = "Biblioteca"
 				strPrestito=strPrestito+ _("Prestato il: ")+ISBNborrowDate[pISBN]+'\n'
-			o = open('bibliodb.json', 'w')
-			json.dump(
-				(ISBNuse,
-				 isbnPos,
-				 titleIsbn,
-				 isbnTitle,
-				 isbnAuthor,
-				 nomeFile,
-				 ISBNown,
-				 borrowTime,
-				 ISBNborrowDate),
-				o)
-			o.close()
-			#except KeyError:
-			#   print_("Errore")+traceback.format_exc()
-	else:
-		strPrestito=_("Il titolo è stato prestato in data ")+ISBNborrowDate[pISBN]
+			else:
+				strPrestito=_("Il titolo non è stato prestato!")+ISBNborrowDate[pISBN]
+		o = open('bibliodb.json', 'w')
+		json.dump(
+			(ISBNuse,
+			 isbnPos,
+			 titleIsbn,
+			 isbnTitle,
+			 isbnAuthor,
+			 nomeFile,
+			 ISBNown,
+			 borrowTime,
+			 ISBNborrowDate),
+			o)
+		o.close()
+		#except KeyError:
+		#   print_("Errore")+traceback.format_exc()
 	return strPrestito
 def auth(user,password):
 	h = SHA512.new()
