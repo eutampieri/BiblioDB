@@ -644,6 +644,11 @@ def prestaBook(userP,passwordP,isbnP,idB,statoP):
 def returnIcon():
 	icon=open('static/favicon.ico')
 	return Response(response=icon.read(), status=200,mimetype="image/icon")
+@app.route('/css/<url>')
+def getCssUrl(url):
+	qrurl=urllib2.urlopen(url)
+	qr=qrurl.read()
+	return Response(response='<style>body{font-family: "Times New Roman", Times, serif;}</style>'+qr, status=200,mimetype="image/png")
 @app.route('/update')
 def update():
 	ISBNuse = {}
