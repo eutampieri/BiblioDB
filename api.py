@@ -646,7 +646,9 @@ def returnIcon():
 	return Response(response=icon.read(), status=200,mimetype="image/icon")
 @app.route('/css/<url>')
 def getCssUrl(url):
-	qrurl=urllib2.urlopen(urllib2.unquote(url).replace("§",'/'))
+	newUrl=urllib2.unquote(url).replace("§",'/')
+	print newUrl
+	qrurl=urllib2.urlopen(newUrl)
 	qr=qrurl.read()
 	return Response(response='<style>body{font-family: "Times New Roman", Times, serif;}</style>'+qr, status=200,mimetype="image/png")
 @app.route('/update')
