@@ -691,5 +691,5 @@ def update():
 		return _("<h1>Il DataBase e stato aggiornato!</h1>")
 if __name__ == '__main__':
 	init_localization()
-	getCssUrl("http%3A§§192.168.1.6:5000§cercahtml§titolo§gi)
+	getCssUrl("http%3A§§192.168.1.6:5000§cercahtml§titolo§gi")
 	app.run(host='0.0.0.0')
