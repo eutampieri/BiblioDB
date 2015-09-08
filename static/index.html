@@ -31,7 +31,7 @@
 	<script src="js/sha512.js"></script>
 	<script src="js/bibliodb.js"></script>
 	<script type="text/javascript">
-		var version=221;
+		var version=222;
 		var UUID;
 		if(getMobileOS!="iOS"){
 			if(checkCookie("cookie")){
@@ -194,7 +194,7 @@
 		}
 		function readISBN(){
 			if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
-				var isbn=document.cookie.replace("isbn=","");
+				var isbn=getCookie("isbn");
 			}
 			else{
 				var isbn=prompt("Inserisci l'ISBN", "ISBN");
@@ -205,7 +205,7 @@
 		}
 		function PreadISBN(){
 			if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
-				var Pisbn=document.cookie.replace("isbn=","");
+				var Pisbn=getCookie("isbn");
 			}
 			else{
 				var Pisbn=prompt("Inserisci l'ISBN", "ISBN");
