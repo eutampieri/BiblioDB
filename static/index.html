@@ -34,7 +34,7 @@
 	<script src="js/sha512.js"></script>
 	<script src="js/bibliodb.js"></script>
 	<script type="text/javascript">
-		var version=206;
+		var version=210;
 		var UUID;
 		if(getMobileOS!="iOS"){
 			if(checkCookie("cookie")){
@@ -173,7 +173,9 @@
 			}
 			idB=document.getElementById("idtessera").value;
 			statoP=document.getElementById("prestaorientra").value;
-			document.getElementById("prestaBox").innerHTML=getUrl('http://'+ip+':'+porta+'/isbninfo/isbn/'+document.getElementById("titoisbn").value).replace(new RegExp('\r?\n','g'), '<br />');
+			risposta=getUrl('http://'+ip+':'+porta+'/presta/'+user+'/'+password+'/'+pISBN+'/'+idB+'/'+statoP).replace(new RegExp('\r?\n','g'), '<br />');
+			document.getElementById("prestaBox").innerHTML=risposta;
+			window.open('http://'+ip+':'+porta+'/print/'+risposta.replace(new RegExp('/','g'), '~'));
 		}
 		function add(){
 			document.getElementById("addBox").innerHTML="";
@@ -186,12 +188,12 @@
 		//@app.route('/users/add/<user>/<password>/<codTessera>/<badge>')
 		//def AggiungiUtente(user, password, codTessera,badge):
 		function userAdd(){
-			document.getElementById("addUserBox").innerHTML="";
+			document.getElementById("addUBox").innerHTML="";
 			var codTessera=document.getElementById("codTessera").value;
 			var badge=document.getElementById("badge").value;
 			var isbn=document.getElementById("isbn").value;
 			var posizione=document.getElementById("posizione").value;
-			document.getElementById("addUBox").innerHTML=getUrl('http://'+ip+':'+porta+'/users/add/'+codTessera+'/'+badge).replace(new RegExp('\r?\n','g'), '<br />');
+			document.getElementById("addUBox").innerHTML=getUrl('http://'+ip+':'+porta+'/users/add/'+user+'/'+password+'/'+codTessera+'/'+badge).replace(new RegExp('\r?\n','g'), '<br />');
 		}
 		function readISBN(){
 			if(getMobileOS()!='unknown'&&checkCookie("cookie")&&navigator.cookieEnabled){
@@ -200,8 +202,8 @@
 			else{
 				var isbn=prompt("Inserisci l'ISBN", "ISBN");
 			}
-			document.getElementById("autore").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/titolo');
-			document.getElementById("addTitolo").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/autore');
+			document.getElementById("autore").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/autore');
+			document.getElementById("addTitolo").value=getUrl('http://'+ip+':'+porta+'/gbooks/'+isbn+'/titolo');
 			document.getElementById("isbn").value=isbn;
 		}
 		function PreadISBN(){
@@ -268,7 +270,7 @@
 
 			</div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
 			<ul>
 				<li>
 					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
@@ -321,7 +323,7 @@
 			</a>
 			<div id="cercaBox"></div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
 				<ul>
 						<li>
 								<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
@@ -356,7 +358,7 @@
 				<div data-controltype="textblock" id="listaBox">
 				</div>
 			</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
 			<ul>
 				<li>
 					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
@@ -551,7 +553,7 @@
 				</a>
 			</div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a">
+		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
 			<ul>
 				<li>
 					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">

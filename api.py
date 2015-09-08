@@ -311,6 +311,9 @@ def AggiungiUtente(user, password, codTessera,badge):
 		return addUser(codTessera,badge)
 	else:
 		return _("Non Autorizzato!")
+@app.route('/print/<text>')
+def PrintHtmlWithJs(text):
+	return "<script>window.print();window.close();</script>"+text.replace('~','/')
 @app.route('/rfid/auth/<rfid>')
 def checkBadge(rfid):
 	if ipEnabled==True:
@@ -693,4 +696,5 @@ def update():
 		return _("<h1>Il DataBase e stato aggiornato!</h1>")
 if __name__ == '__main__':
 	init_localization()
+	#app.run(host='0.0.0.0', debug=True)
 	app.run(host='0.0.0.0')
