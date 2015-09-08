@@ -31,7 +31,7 @@
 	<script src="js/sha512.js"></script>
 	<script src="js/bibliodb.js"></script>
 	<script type="text/javascript">
-		var version=220;
+		var version=221;
 		var UUID;
 		if(getMobileOS!="iOS"){
 			if(checkCookie("cookie")){
@@ -215,6 +215,15 @@
 		}
 		$( "#page5" ).popup('open');
 	</script>
+	<style type="text/css">
+		.visibile{
+			display: default;
+		}
+		.nascosto{
+			display: none;
+		}
+	</style>
+
 </head>
 <body onload="lista();">
 	<div data-role="page" data-control-title="Home" id="page1">
