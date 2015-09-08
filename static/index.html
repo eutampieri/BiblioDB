@@ -25,16 +25,13 @@
 	<!-- For iPhone 6 Plus with @3× display: -->
 	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
 	<link rel="icon" href="favicon.ico">
-	<link href="css/codiqa.ext.min.css" rel="stylesheet">
-	<link href="css/jquery.mobile-1.3.1.min.css" rel="stylesheet">
-	<script src="js/jquery-1.9.1.min.js"></script>
-	<script src="js/jquery.mobile-1.3.1.min.js"></script>
-	<script src="js/codiqa.ext.min.js"></script>
-	<script src="js/et-software.js"></script>
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
 	<script src="js/sha512.js"></script>
 	<script src="js/bibliodb.js"></script>
 	<script type="text/javascript">
-		var version=210;
+		var version=220;
 		var UUID;
 		if(getMobileOS!="iOS"){
 			if(checkCookie("cookie")){
@@ -218,20 +215,6 @@
 		}
 		$( "#page5" ).popup('open');
 	</script>
-	<style type="text/css">
-		.ui-icon-lock {
-			background-image: url("../static/css/images/lock-white.png");
-			/* Make your icon fit */
-			background-size: 14px 14px;
-			background-position: center; 
-		}
-		.visibile{
-			display: default;
-		}
-		.nascosto{
-			display: none;
-		}
-	</style>
 </head>
 <body onload="lista();">
 	<div data-role="page" data-control-title="Home" id="page1">
@@ -270,29 +253,31 @@
 
 			</div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
-			<ul>
+		<div data-role="footer" data-position="fixed">	
+			<div data-role="navbar" data-iconpos="top" data-theme="a">
+				<ul>
+					<li>
+						<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+							Home
+						</a>
+					</li>
+					<li>
+						<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+							Ricerca
+						</a>
+					</li>
+					<li>
+						<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+							Lista Libri
+						</a>
+					</li>
 				<li>
-					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
-						Home
+					<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+						Area Riservata
 					</a>
 				</li>
-				<li>
-					<a data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
-						Ricerca
-					</a>
-				</li>
-				<li>
-					<a data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
-						Lista Libri
-					</a>
-				</li>
-			<li>
-				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
-					Area Riservata
-				</a>
-			</li>
-			</ul>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div data-role="page" data-control-title="Ricerca" id="page2">
@@ -323,29 +308,31 @@
 			</a>
 			<div id="cercaBox"></div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
+		<div data-role="footer" data-position="fixed">	
+			<div data-role="navbar" data-iconpos="top" data-theme="a">
 				<ul>
-						<li>
-								<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
-										Home
-								</a>
-						</li>
-						<li>
-								<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
-										Ricerca
-								</a>
-						</li>
-						<li>
-								<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
-										Lista Libri
-								</a>
-						</li>
 					<li>
-						<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
-							Area Riservata
+						<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+							Home
 						</a>
 					</li>
+					<li>
+						<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+							Ricerca
+						</a>
+					</li>
+					<li>
+						<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+							Lista Libri
+						</a>
+					</li>
+				<li>
+					<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+						Area Riservata
+					</a>
+				</li>
 				</ul>
+			</div>
 		</div>
 	</div>
 	<div data-role="page" data-control-title="ListaLibri" id="page3">
@@ -358,29 +345,31 @@
 				<div data-controltype="textblock" id="listaBox">
 				</div>
 			</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
-			<ul>
+		<div data-role="footer" data-position="fixed">	
+			<div data-role="navbar" data-iconpos="top" data-theme="a">
+				<ul>
+					<li>
+						<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+							Home
+						</a>
+					</li>
+					<li>
+						<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+							Ricerca
+						</a>
+					</li>
+					<li>
+						<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+							Lista Libri
+						</a>
+					</li>
 				<li>
-					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
-						Home
+					<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+						Area Riservata
 					</a>
 				</li>
-				<li>
-					<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
-						Ricerca
-					</a>
-				</li>
-				<li>
-					<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
-						Lista Libri
-					</a>
-				</li>
-			<li>
-				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
-					Area Riservata
-				</a>
-			</li>
-			</ul>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div data-role="page" data-control-title="AreaRiservata" id="page4">
@@ -553,29 +542,31 @@
 				</a>
 			</div>
 		</div>
-		<div data-role="tabbar" data-iconpos="top" data-theme="a" data-position="fixed">
-			<ul>
+		<div data-role="footer" data-position="fixed">	
+			<div data-role="navbar" data-iconpos="top" data-theme="a">
+				<ul>
+					<li>
+						<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
+							Home
+						</a>
+					</li>
+					<li>
+						<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
+							Ricerca
+						</a>
+					</li>
+					<li>
+						<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
+							Lista Libri
+						</a>
+					</li>
 				<li>
-					<a class="page1" data-transition="fade" data-theme="" onclick="naviga(1);" data-icon="home">
-						Home
+					<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
+						Area Riservata
 					</a>
 				</li>
-				<li>
-					<a class="page2" data-transition="fade" data-theme="" onclick="naviga(2);" data-icon="search">
-						Ricerca
-					</a>
-				</li>
-				<li>
-					<a class="page3" data-transition="fade" data-theme="" onclick="naviga(3);" data-icon="info">
-						Lista Libri
-					</a>
-				</li>
-			<li>
-				<a data-transition="fade" data-theme="" onclick="naviga(4);" data-icon="lock">
-					Area Riservata
-				</a>
-			</li>
-			</ul>
+				</ul>
+			</div>
 		</div>
 	</div>
 </body>
