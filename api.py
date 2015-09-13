@@ -434,16 +434,13 @@ def cercaTitoloHtml(titolo):
 	trt='<table style="border:none;">'
 	for isbn, titoloDict in isbnTitle.items():
 		if titoloDict.find(titolo)!=-1:
-			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			s.connect(("etsoftware.forumfree.it",80))
-			url="http://"+s.getsockname()[0]+":5000/gbooks/"+isbn+"/copertina"
-			s.close()
+			url="http://bibliodb.sytes.net:6051/gbooks/"+isbn+"/copertina"
 			try:
 				if ISBNown[isbn.upper()]=="Biblioteca":
 					statoLibro=_("Non prestato")
 				else:
 					statoLibro=_("Prestato")
-				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+titoloDict.title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro
+				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+titoloDict.title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro+((' a: '+ISBNown[isbn.upper()]+"il "+ISBNborrowDate[isbn.upper()]) if statoLibro == 'Prestato' else '' )
 			except:
 			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
 				resp='<br>'+titoloDict+'<br>'+isbn+'<br>'+traceback.format_exc()+'<br>----------------------------------'
@@ -456,15 +453,13 @@ def cercaAutoreHtml(titolo):
 	trt='<table style="border:none;">'
 	for isbn, titoloDict in isbnAuthor.items():
 		if titoloDict.find(titolo)!=-1:
-			s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			s.connect(("etsoftware.forumfree.it",80))
-			url="http://"+s.getsockname()[0]+":5000/gbooks/"+isbn+"/copertina"
+			url="http://bibliodb.sytes.net:6051/gbooks/"+isbn+"/copertina"
 			try:
 				if ISBNown[isbn.upper()]=="Biblioteca":
 					statoLibro=_("Non prestato")
 				else:
 					statoLibro=_("Prestato")
-				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+isbnTitle[isbn.upper()].title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro
+				resp='<tr><td style="width:auto;"><img alt="" id="cover" src="'+url+'"></td><td>'+"<br>Titolo: "+isbnTitle[isbn.upper()].title()+_("<br>Autore: ")+ISBNToAut(str(isbn).upper()).title()+_("<br>Posizione: ")+isbnPos[isbn.upper()].upper()+"<br>ISBN: "+isbn.upper()+_("<br>Stato: ")+statoLibro+((' a: '+ISBNown[isbn.upper()]+" il "+ISBNborrowDate[isbn.upper()]) if statoLibro == 'Prestato' else '' )
 			except:
 			#	resp=Response(response="Errore: Controlla il titolo",status=200,mimetype="text/plain")
 				resp='<br>'+titoloDict+'<br>'+isbn+'<br>'+traceback.format_exc()+'<br>----------------------------------'
@@ -695,6 +690,9 @@ def update():
 			o.close()
 		return _("<h1>Il DataBase e stato aggiornato!</h1>")
 if __name__ == '__main__':
+	fpo=open('port','r')
+	port=fpo.read()
+	fpo.close()
 	init_localization()
 	#app.run(host='0.0.0.0', debug=True)
-	app.run(host='0.0.0.0')
+	app.run(host='0.0.0.0', port=port)
