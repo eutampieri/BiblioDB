@@ -691,7 +691,7 @@ def update():
 		return _("<h1>Il DataBase e stato aggiornato!</h1>")
 if __name__ == '__main__':
 	fpo=open('port','r')
-	port=fpo.read()
+	port=int(fpo.read())
 	fpo.close()
 	init_localization()
 	#app.run(host='0.0.0.0', debug=True)
