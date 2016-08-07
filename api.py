@@ -434,7 +434,7 @@ def cercaTitoloHtml(titolo):
 	trt='<table style="border:none;">'
 	for isbn, titoloDict in isbnTitle.items():
 		if titoloDict.find(titolo)!=-1:
-			url="http://bibliodb.sytes.net:6051/gbooks/"+isbn+"/copertina"
+			url="http://serverseutampieri.ddns.net/gbooks.php?isbn="+isbn+"&mode=copertina"
 			try:
 				if ISBNown[isbn.upper()]=="Biblioteca":
 					statoLibro=_("Non prestato")
@@ -453,7 +453,7 @@ def cercaAutoreHtml(titolo):
 	trt='<table style="border:none;">'
 	for isbn, titoloDict in isbnAuthor.items():
 		if titoloDict.find(titolo)!=-1:
-			url="http://bibliodb.sytes.net:6051/gbooks/"+isbn+"/copertina"
+			url="http://serverseutampieri.ddns.net/gbooks.php?isbn="+isbn+"&mode=copertina"
 			try:
 				if ISBNown[isbn.upper()]=="Biblioteca":
 					statoLibro=_("Non prestato")
