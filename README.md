@@ -6,22 +6,23 @@ You can use in two ways:
 
 ##Security
 The API brought with this application is secure: json files containing users and ip whitelist are encrypted.
-This allows to have a server (using a Raspberry Pi or a old PC) with all the informations and unlimited clients that request and send infos to the main server.
+This allows to have a server (that can be even a Raspberry Pi or an old PC) with all the informations and unlimited clients that request and send infos to the main server.
 ###Server edition
-The server MUST NOT use a keyboard, a mouse or a monitor: it only needs to be plugged to the power plug and to the LAN with an Ethernet cable to avoid security problems. It's also preferrable that the server machine runs a linux server distribution because of its stability and its secure attitude. Evry machine on the net that'll use BibilioDB needs a static IP, or the DHCP setted to not change IPs.
+The server can be headless: it only needs to be plugged to the power plug and to the LAN with an Ethernet cable. To avoid security problems, like getting the encryption key, it's recomended using an headless machine with any physical access to users. It's also preferrable that the server machine runs a linux server distribution because of its stability and its secure attitude. If you want to enable IP authentication in addition to user and pasword, every machine on the net that'll use BibilioDB needs a static IP, or the DHCP setted to not change IPs.
 
-In line 46 of api.py you can turn on or off ip check by modifying variable value to True or False. This is useful if you want to use only a limited number of client to add or lend books.
+In line 46 of api.py you can turn on or off IP authentication by modifying variable value to True or False. This is useful if you want to use only a limited number of client to add or lend books.
 ```python
 ipEnabled=True
 ```
 Before running the first time the API you should modify defalut IPs and users on lines 45,61,62,63:
 ```python
-ip={"127.0.0.1":"Server", "enter here IP":"enter description","...":"..."}
+ip={"127.0.0.1":"Server", "enter here IP":"enter description","...":"..."}#Not necessary if ipEnables=false
 utenti={"enter username":"enter password", "enter username 1","enter password 1","...":"..."}
 badge={"enter username":"enter userID","enter username 1","enter userID 1","...":"..."}
 tipoUtenti={"enter username":"enter role","enter username 1","enter role 1","...":"..."}
 #Administrator role must be "admin", but you can create other roles for other users that aren't admins
 ```
+Then, after you performed the first run, kill the server, remove infos from dictionaries on lines 45,61,62,63 and restart the server.
 ##API
 When used in Server Mode, BiblioDB provides a REST API and a JQuery Mobile WebApp, accessible via http://{serverip}:5000/static/index.html
 ###API URL Scheme
