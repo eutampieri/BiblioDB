@@ -5,6 +5,7 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y python-logilab-common
+  - bash keygen.sh
 install: "pip install flask pycrypto"
 # command to run tests
 script: "pytest api.py"
