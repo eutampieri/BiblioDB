@@ -4,10 +4,10 @@ You can use in two ways:
 * Single client mode, no API
 * Server and clients mode, with API.
 
-##Security
-The API brought with this application is secure: json files containing users and ip whitelist are encrypted.
-This allows to have a server (that can be even a Raspberry Pi or an old PC) with all the informations and unlimited clients that request and send infos to the main server.
-###Server edition
+## Security
+The API brought with this application ~is secure~ has serious flaws: don't use it. Use instead (../PHPBiblioDB)[this project] that supports the migration ~json files containing users and ip whitelist are encrypted.
+This allows to have a server (that can be even a Raspberry Pi or an old PC) with all the informations and unlimited clients that request and send infos to the main server.~
+### Server edition
 The server can be headless: it only needs to be plugged to the power plug and to the LAN with an Ethernet cable. To avoid security problems, like getting the encryption key, it's recomended using an headless machine with any physical access to users. It's also preferrable that the server machine runs a linux server distribution because of its stability and its secure attitude. If you want to enable IP authentication in addition to user and pasword, every machine on the net that'll use BibilioDB needs a static IP, or the DHCP setted to not change IPs.
 
 In line 46 of api.py you can turn on or off IP authentication by modifying variable value to True or False. This is useful if you want to use only a limited number of client to add or lend books.
